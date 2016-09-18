@@ -1,0 +1,20 @@
+@include component(header) {
+
+  @include part(container) {
+    background: #614385; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #614385 , #516395); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #614385 , #516395); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    padding: 1.5em;
+  }
+
+  @include part(title) {
+    font-size: 1em;
+    color: white;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+
+  }
+
+
+}

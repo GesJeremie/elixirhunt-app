@@ -1,0 +1,70 @@
+@include component(loader) {
+
+    @include part(container) {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: darken($color-grey, 10%);
+    }
+
+    @include part(picture) {
+        padding-top: 10em;
+        text-align: center;
+
+        @include gridle_state(xs) {
+            padding-top: 5em;
+        }
+    }
+
+    @include part(message) {
+        padding-top: 10em;
+        font-weight: bold;
+        font-size: 1.4em;
+        text-transform: uppercase;
+
+        @include gridle_state(xs) {
+            padding-top: 1em;
+            font-size: 1em;
+            text-align: center;
+        }
+    }
+
+    @include part(spinner) {
+        text-align: left;
+        width: 40px;
+        height: 40px;
+        margin: 40px left;
+        background-color: #333;
+        border-radius: 100%;  
+        -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+        animation: sk-scaleout 1.0s infinite ease-in-out;
+
+        @include gridle_state(xs) {
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 4em;
+        }
+    }
+
+    @-webkit-keyframes sk-scaleout {
+        0% { -webkit-transform: scale(0) }
+        100% {
+            -webkit-transform: scale(1.0);
+            opacity: 0;
+        }
+    }
+
+    @keyframes sk-scaleout {
+        0% { 
+            -webkit-transform: scale(0);
+            transform: scale(0);
+        } 100% {
+            -webkit-transform: scale(1.0);
+            transform: scale(1.0);
+            opacity: 0;
+        }
+    }
+
+}

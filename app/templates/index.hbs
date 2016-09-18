@@ -1,0 +1,87 @@
+<div class="header__container">
+  <div class="container">
+    <div class="header__title">We hunt for Elixir Jobs ... so you don't have to!</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section__container">
+    <div class="section__email">
+      <form {{action "subscribe" on="submit"}}>
+        <div class="gr-4">
+          <div class="section__description">Get a weekly email of all new jobs</div>
+        </div>
+        <div class="gr-2">
+          {{input type="text" value=email placeholder="Email"}}
+        </div>
+        <div class="gr-2">
+          {{input type="text" value=firstname placeholder="First Name"}}
+        </div>
+        <div class="gr-2">
+          {{input type="text" value=lastname placeholder="Last Name"}}
+        </div>
+        <div class="gr-2">
+          <button type="submit" class="{{unless isFormValid "--disabled"}}" disabled= {{disabledButton}}>{{ subscribeText }}</button>
+        </div>
+        <div class="clear"></div>
+      </form>
+
+    </div>
+    
+    <div class="gr-8">
+      <h3 class="section__title">Jobs Hunted</h3>
+    </div>
+    <div class="gr-4">
+      <div class="+text-right">
+        <a href="https://twitter.com/elixirhunt" target="_blank" class="section__twitter"><i class="icon-twitter"></i> Follow us</a>
+      </div>
+    </div>
+    <div class="clear"></div>
+
+    <div class="section__details">We hunt the job offers from different websites such as: <a href="https://angel.co/" target="_blank">angel.co</a>,
+    <a href="https://elixir-jobs.org/" target="_blank">elixir-jobs.org</a>, <a target="_blank" href="https://workwithelixir.com">workwithelixir.com</a>, <a target="_blank" href="http://www.jobsite.co.uk/">jobsite.co.uk</a>,
+    <a target="_blank" href="https://weworkremotely.com/">weworkremotely.com</a> and ... more!
+    </div>
+
+  </div>
+</div>
+<div class="container">
+
+  {{#each classified as |post|}}
+    <div class="post__container" {{action "toggleShow" post on="click"}}>
+
+      <div class="gr-6">
+        <div class="post__title">{{ post.title }}</div>
+        <div class="post__company">{{if-empty post.company }}</div>
+      </div>
+      <div class="gr-4">
+        <div class="post__location"><i class="icon-location"></i> {{if-empty post.location }}</div>
+      </div>
+      <div class="gr-2">
+        <div class="post__date"><i class="icon-clock"></i> {{humanize-date post.date }}</div>
+
+      </div>
+      <div class="clear"></div>
+
+      {{#if post.visible}}
+        {{#if post.logo}}
+          <div class="post__logo"><img src="{{ post.logo }}" /></div>
+        {{/if}}
+        <div class="post__content">
+          {{{markdown-decode post.content}}}
+        </div>
+      {{/if}}
+    </div>
+
+    {{#if post.visible}}
+      <div class="post__apply">
+        <a {{action "apply" post on="click" }} href="{{ post.apply }}" target="_blank">Apply for this job</a>
+      </div>
+    {{/if}}
+  {{/each}}
+
+</div>
+
+<div class="+spacer-large"></div>
+
+<div class="footer__sword"><img src="/assets/images/elixir.png" /></div>

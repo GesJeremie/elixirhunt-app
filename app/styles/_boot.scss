@@ -1,0 +1,84 @@
+// ===========================================================
+// Boot
+// ===========================================================
+// Init dependencies
+//
+
+// ===========================================================
+// Csstyle
+// ===========================================================
+// BEM made easy.
+//
+@import 'csstyle';
+
+// ===========================================================
+// Helpers
+// ===========================================================
+//
+@import 'helpers/variables';
+@import 'helpers/functions';
+@import 'helpers/mixins';
+@import 'helpers/tweaks';
+
+// ===========================================================
+// Gridle
+// ===========================================================
+// Grid system
+//
+@import "gridle";
+
+// Setup the grid
+@include gridle_setup((context: 12, gutter-width: 10px, direction: ltr, debug: true));
+
+// Generate gridle css classes to use in our html
+@include gridle_generate_classes();
+
+// Register states
+@include gridle_register_state( xs, (
+    max-width : 768px
+) );
+@include gridle_register_state( sm , (
+    min-width : 768px
+) );
+@include gridle_register_state( md, (
+    min-width : 992px
+) );
+@include gridle_register_state( lg, (
+    min-width : 1200px
+) );
+
+// Basic container
+.container {
+  margin: 0 auto;
+  max-width: 960px;
+
+  @include gridle_state(xs) {
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+}
+
+// Fluid container (useful for navbars and stuff like that)
+.container-fluid {
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+// Mobile
+[class*="gr-"] {
+    @include gridle_state( xs ) {
+        @include gridle_grid( 12 );
+    }
+}
+
+// ===========================================================
+// Reset
+// ===========================================================
+// Reset differences between browsers.
+//
+@import "_reset";
+
+// ===========================================================
+// Addons Ember
+// ===========================================================
+//

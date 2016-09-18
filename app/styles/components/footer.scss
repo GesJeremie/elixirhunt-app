@@ -1,0 +1,10 @@
+@include component(footer) {
+
+  @include part(sword) {
+    text-align: center;
+    img {
+      width: 60px;
+    }
+  }
+
+}

@@ -1,0 +1,45 @@
+@include tweak(text-right) {
+    text-align: right;
+}
+
+@include tweak(text-left) {
+    text-align: left;
+}
+
+@include tweak(text-center) {
+    text-align: center;
+}
+
+@include tweak(float-left) {
+    float: left;
+}
+
+@include tweak(float-right) {
+    float: right;
+}
+
+@include tweak(spacer) {
+  height: 1em;
+  content: " ";
+}
+
+@include tweak(spacer-large) {
+  height: 5em;
+  content: " ";
+}
+
+@include tweak(clear) {
+    clear: both;
+}
+
+@include tweak(nofloat) {
+    float: none;
+}
+
+@include tweak(margin-bottom-0) {
+    margin-bottom: 0;
+}
+
+@include tweak(nopad) {
+    padding: 0;
+}
