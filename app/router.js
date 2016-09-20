@@ -15,6 +15,9 @@ Router.map(function() {
       this.route('edit');
     });
   });
+
+  this.route('404', { path: '*:' });
+
 });
 
 export default Router;
