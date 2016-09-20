@@ -3,7 +3,7 @@ export default Ember.Controller.extend({
   keen: Ember.inject.service(),
 
   subscribeText: 'Subscribe',
-
+  
   classified: Ember.computed('model', function() {
     return this.get('model').toArray().reverse()
   }),
@@ -40,8 +40,9 @@ export default Ember.Controller.extend({
       title: post.get('title')
     });
 
-    $.get('https://hooks.zapier.com/hooks/catch/1645102/63i78w/', {
-      title: post.get('title')
+    Ember.$.get('/api/ifttt/maker', {
+      event: 'new_click_apply',
+      value1: post.get('title')
     });
 
     window.open(post.get('apply'), '_blank');
@@ -51,16 +52,12 @@ export default Ember.Controller.extend({
 
     this.set('subscribeText', 'Loading ...');
 
-    let request = $.get('https://hooks.zapier.com/hooks/catch/1645102/6bhfip/', {
-      data: {
-        email: this.get('email'),
-        firstname: this.get('firstname'),
-        lastname: this.get('lastname')
-      },
-      xhrFields: {
-        withCredentials: true
-      }
-    });
+    let request = Ember.$.get('/api/ifttt/maker', {
+        event: 'new_subscriber_mailchimp',
+        value1: this.get('email'),
+        value2: this.get('firstname'),
+        value3: this.get('lastname')
+      });
 
     request.done((response) => {
       this.set('subscribeText', 'Done!');
