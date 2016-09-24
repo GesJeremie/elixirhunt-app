@@ -1,0 +1,120 @@
++component(section)
+
+  +part(container)
+    margin-top: 2em
+    margin-bottom: 2em
+
+  +part(details)
+    background-color: lighten(#FEDB1D, 40%)
+    color: #3E4651
+    padding: 0.7em
+    margin-top: 1em
+    border-radius: 5px
+    
+    a
+      color: #3E4651
+      font-weight: bold
+
+
+  +part(twitter)
+    display: inline-block
+    text-align: right
+    background-color: #4099FF
+    color: white
+    padding: 0.4em
+    padding-left: 0.6em
+    padding-right: 0.6em
+    border-radius: 5px
+    transition: background-color 0.2s
+
+    &:hover
+      background-color: darken(#4099FF, 12%)
+
+    
+    i
+      vertical-align: middle
+
+
+    +gridle_state(xs)
+      float: left
+      margin-top: 0.7em
+
+
+  +part(title)
+    font-size: 1.8em
+    text-align: left
+    color: #2D3941
+    font-weight: bold
+
+  +part(email)
+    margin-top: 1em
+    border-radius: 5px
+    padding: 1em
+    border: 1px solid #E0E0EA
+    color: #3E4651
+    font-weight: bold
+    margin-bottom: 1.5em
+
+    +gridle_state(xs)
+      display: none
+
+
+    input
+      border: none
+      background-color: white
+      font-size: 0.7em
+      width: 100%
+      padding-left: 1em
+      padding-right: 1em
+      padding-top: 1em
+      padding-bottom: 1em
+      border-radius: 5px
+      font-weight: bold
+      outline: 0
+      border: 2px solid darken(#3E4651, 5%)
+
+      +gridle_state(xs)
+        margin-bottom: 1em
+  
+
+
+    button
+      width: 100%
+      border: none
+      background-color: #FC575E
+      color: white
+      margin-top: 0.15em
+      padding: 0.8em
+      border-radius: 5px
+      font-weight: bold
+      font-size: 0.8em
+      outline: 0
+      cursor: pointer
+
+
+    button:disabled
+      cursor: not-allowed
+      opacity: 0.8
+
+
+    ::-webkit-input-placeholder
+      color: #3E4651
+
+
+    :-ms-input-placeholder
+      color: #3E4651
+
+
+    ::-moz-placeholder
+      color: #3E4651
+      opacity: 1
+
+
+    :-moz-placeholder
+      color: #3E4651
+      opacity: 1
+
+
+
+  +part(description)
+    padding-top: 0.5em

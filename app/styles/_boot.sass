@@ -9,76 +9,55 @@
 // ===========================================================
 // BEM made easy.
 //
-@import 'csstyle';
+@import 'csstyle'
 
 // ===========================================================
 // Helpers
 // ===========================================================
 //
-@import 'helpers/variables';
-@import 'helpers/functions';
-@import 'helpers/mixins';
-@import 'helpers/tweaks';
+@import 'helpers/variables'
+@import 'helpers/functions'
+@import 'helpers/mixins'
+@import 'helpers/tweaks'
+
 
 // ===========================================================
 // Gridle
 // ===========================================================
-// Grid system
-//
-@import "gridle";
+// Grid system 
+// 
+@import "gridle"
 
 // Setup the grid
-@include gridle_setup((context: 12, gutter-width: 10px, direction: ltr, debug: true));
++gridle_setup((context: 12, gutter-width: 10px, direction: ltr, debug: true))
 
 // Generate gridle css classes to use in our html
-@include gridle_generate_classes();
-
-// Register states
-@include gridle_register_state( xs, (
-    max-width : 768px
-) );
-@include gridle_register_state( sm , (
-    min-width : 768px
-) );
-@include gridle_register_state( md, (
-    min-width : 992px
-) );
-@include gridle_register_state( lg, (
-    min-width : 1200px
-) );
++gridle_generate_classes()
 
 // Basic container
-.container {
-  margin: 0 auto;
-  max-width: 960px;
-
-  @include gridle_state(xs) {
-    margin-left: 1em;
-    margin-right: 1em;
-  }
-}
+.container
+  margin: 0 auto
+  max-width: 960px
 
 // Fluid container (useful for navbars and stuff like that)
-.container-fluid {
-  margin: 0 auto;
-  padding: 0 20px;
-}
+.container-fluid
+  margin: 0 auto
+  width: 95%
 
 // Mobile
-[class*="gr-"] {
-    @include gridle_state( xs ) {
-        @include gridle_grid( 12 );
-    }
-}
+[class*="gr-"]
+  +gridle_set((mobile : (grid : 12, push : 0, pull : 0, prefix : 0, suffix : 0)))
+
 
 // ===========================================================
 // Reset
 // ===========================================================
 // Reset differences between browsers.
-//
-@import "_reset";
+// 
+@import "_reset"
 
 // ===========================================================
 // Addons Ember
 // ===========================================================
 //
+

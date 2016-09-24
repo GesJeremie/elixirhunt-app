@@ -45,6 +45,17 @@ define('elixirhunt/components/ember-load-remover', ['exports', 'ember-load/compo
     }
   });
 });
+define("elixirhunt/controllers/admin/auth/login", ["exports"], function (exports) {
+  exports["default"] = Ember.Controller.extend({
+
+    actions: {
+      authenticate: function authenticate() {
+        alert("ok");
+      }
+    }
+
+  });
+});
 define('elixirhunt/controllers/index', ['exports'], function (exports) {
   exports['default'] = Ember.Controller.extend({
 
@@ -622,6 +633,9 @@ define('elixirhunt/router', ['exports', 'ember', 'elixirhunt/config/environment'
     this.route('stats');
 
     this.route('admin', function () {
+      this.route('auth', function () {
+        this.route('login');
+      });
       this.route('jobs', function () {
         this.route('new');
         this.route('edit');
@@ -772,6 +786,122 @@ define("elixirhunt/templates/admin", ["exports"], function (exports) {
         return morphs;
       },
       statements: [["content", "outlet", ["loc", [null, [2, 0], [2, 10]]], 0, 0, 0, 0]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("elixirhunt/templates/admin/auth/login", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 25,
+            "column": 0
+          }
+        },
+        "moduleName": "elixirhunt/templates/admin/auth/login.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "login");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "container");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "login__main");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "login__content");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "login__logo");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("img");
+        dom.setAttribute(el6, "src", "/assets/images/knight.png");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("form");
+        var el6 = dom.createTextNode("\n\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "login__input__container --radius-top --radius-bottom");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("i");
+        dom.setAttribute(el7, "class", "icon-password");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "+spacer");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("button");
+        dom.setAttribute(el6, "type", "submit");
+        var el7 = dom.createTextNode("Hello");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1, 1, 1, 3]);
+        var element1 = dom.childAt(element0, [5]);
+        var morphs = new Array(4);
+        morphs[0] = dom.createElementMorph(element0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element0, [1]), 1, 1);
+        morphs[2] = dom.createAttrMorph(element1, 'class');
+        morphs[3] = dom.createAttrMorph(element1, 'disabled');
+        return morphs;
+      },
+      statements: [["element", "action", ["authenticate"], ["on", "submit"], ["loc", [null, [8, 14], [8, 51]]], 0, 0], ["inline", "input", [], ["type", "password", "name", "password", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [11, 58], [11, 66]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "Enter your password", "class", "login__input__field"], ["loc", [null, [11, 12], [11, 131]]], 0, 0], ["attribute", "class", ["concat", ["button --login --large --expand ", ["subexpr", "if", [["get", "isButtonDisabled", ["loc", [null, [17, 76], [17, 92]]], 0, 0, 0, 0], "--muted"], [], ["loc", [null, [17, 71], [17, 104]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["attribute", "disabled", ["get", "isButtonDisabled", ["loc", [null, [17, 118], [17, 134]]], 0, 0, 0, 0], 0, 0, 0, 0]],
       locals: [],
       templates: []
     };
@@ -1715,7 +1845,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+376b39fc"});
+  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+d8e773ee"});
 }
 
 /* jshint ignore:end */

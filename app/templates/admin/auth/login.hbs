@@ -1,0 +1,24 @@
+<div class="login">
+  <div class="container">
+    <div class="login__main">
+      <div class="login__content">
+        <div class="login__logo">
+          <img src="/assets/images/knight.png" />
+        </div>
+        <form {{action 'authenticate' on='submit'}}>
+
+          <div class="login__input__container --radius-top --radius-bottom">
+            {{input type="password" name="password" value=password placeholder="Enter your password" class="login__input__field" }}
+            <i class="icon-password"></i>
+          </div>
+
+          <div class="+spacer"></div>
+
+          <button type="submit" class="button --login --large --expand {{if isButtonDisabled '--muted'}}" disabled= {{isButtonDisabled}}>Hello</button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

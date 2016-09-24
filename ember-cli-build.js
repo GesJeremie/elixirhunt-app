@@ -15,7 +15,7 @@ module.exports = function(defaults) {
       }
     },
     sassOptions: {
-      extension: 'scss',
+      extension: 'sass',
       includePaths: [
         'bower_components/csstyle',
         'bower_components/gridle/sass/gridle',

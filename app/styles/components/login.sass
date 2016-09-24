@@ -1,0 +1,192 @@
++component(login)
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    background-color: black
+    +background-gradiant
+
+
+    +part(main)
+        width: 400px
+        margin: 0 auto
+        padding-top: 70px
+
+
+    +part(input)
+        +part(container)
+            border: 0
+            outline: 0
+            width: 100%
+            background-color: white
+            position: relative
+            overflow: hidden
+
+            i
+                position: absolute
+                right: -10px
+                bottom: -10px
+                font-size: 70px
+                color: lighten($color-grey, 20%)
+
+
+            +option(radius-top)
+                border-top-right-radius: 5px
+                border-top-left-radius: 5px
+
+
+            +option(divider-bottom)
+                border-bottom: 1px solid #F0F1F5
+
+
+            +option(radius-bottom)
+                border-bottom-right-radius: 5px
+                border-bottom-left-radius: 5px
+
+
+
+        +part(field)
+            font-size: 14px
+            width: 84%
+            border: 0
+            padding-top: 1.7em
+            padding-bottom: 1.7em
+            padding-left: 1em
+            font-weight: bold
+            outline: 0
+
+
+
+
+    +part(logo)
+        height: 100px
+        line-height: 100px
+        text-align: center
+        width: 100%
+        margin-bottom: 2em
+
+
+    +part(footer)
+        color: white
+        width: 100%
+        text-align: center
+        font-weight: 300
+        font-size: 13px
+        margin-top: 100px
+        margin-bottom: 70px
+
+
+    +part(privacy)
+        color: $color-primary
+        font-weight: bold
+
+        &:hover
+            cursor: pointer
+
+
+
+    +part(content)
+        padding-top: 20px
+
+
+    +part(label)
+        margin-bottom: 2px !important
+        color: white
+        font-weight: 400
+
+
+    +part(forgot)
+        font-weight: bold
+        font-size: 13px
+        color: $color-primary
+        display: inline-block
+
+
+        &:hover
+            cursor: pointer
+
+
+
+    +part(logged)
+        margin-bottom: 0 !important
+        margin-left: 20px
+        padding-top: 5px
+
+        +part(label)
+            font-size: 13px
+            color: white
+            display: inline-block
+            padding-top: 8px
+
+
+        +part(check)
+            margin-right: 2px
+
+
+
+    +part(btns)
+        height: 40px
+
+        +part(back)
+            display: inline-block
+            float: right
+            font-size: 13px
+            height: 40px
+            line-height: 40px
+            color: $color-primary
+
+            &:hover
+                cursor: pointer
+
+
+
+
+    +part(create)
+        text-align: center
+        font-size: 15px
+        font-weight: 400
+        margin-top: 70px
+        color: $color-primary
+
+        &:hover
+            cursor: pointer
+
+
+
+    +part(link)
+        color: $color-primary
+        font-weight: bold
+
+        &:hover
+            cursor: pointer
+
+
+
+    +part(title)
+        color: white
+        font-size: 21px
+        font-weight: 500
+
+
+    +part(subtitle)
+        color: white
+        font-size: 14px
+        padding-bottom: 1em
+
+        +part(login)
+            font-weight: 400
+            color: #4197d5
+
+            &:hover
+                cursor: pointer
+
+
+
+
+    +part(link)
+        color: $color-primary
+
+
+    +part(sep)
+        color: white
