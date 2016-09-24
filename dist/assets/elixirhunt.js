@@ -45,12 +45,35 @@ define('elixirhunt/components/ember-load-remover', ['exports', 'ember-load/compo
     }
   });
 });
-define("elixirhunt/controllers/admin/auth/login", ["exports"], function (exports) {
-  exports["default"] = Ember.Controller.extend({
+define('elixirhunt/controllers/admin/auth/login', ['exports', 'elixirhunt/mixins/disabled-button', 'ember-cp-validations'], function (exports, _elixirhuntMixinsDisabledButton, _emberCpValidations) {
+
+  var Validations = (0, _emberCpValidations.buildValidations)({
+    password: (0, _emberCpValidations.validator)('presence', true)
+  });
+
+  exports['default'] = Ember.Controller.extend(Validations, _elixirhuntMixinsDisabledButton['default'], {
+
+    auth: Ember.inject.service('auth-admin'),
+    notification: Ember.inject.service(),
 
     actions: {
       authenticate: function authenticate() {
-        alert("ok");
+        var _this = this;
+
+        // Security
+        if (!this.get('validations.isValid')) {
+          alert('not valid');
+          return;
+        }
+
+        this.set('forceButtonDisabled', true);
+        var password = this.get('password');
+
+        this.get('auth').authenticate(password).done(function () {}).fail(function () {
+          _this.set('forceButtonDisabled', false);
+          _this.get('notification').error('Impossible to connect with this password');
+          _this.set('password', null);
+        });
       }
     }
 
@@ -606,6 +629,28 @@ define('elixirhunt/instance-initializers/hide-loading-screen', ['exports', 'elix
     initialize: initialize
   };
 });
+define('elixirhunt/mixins/disabled-button', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Mixin.create({
+
+    /**
+     * Flag to know if we need to force the button to be disabled.
+     * @type {Boolean}
+     */
+    forceButtonDisabled: false,
+
+    /**
+     * Check if the button is disabled
+     * @return {true/null}
+     */
+    isButtonDisabled: _ember['default'].computed('validations.isValid', 'forceButtonDisabled', function () {
+      if (this.get('validations.isValid') && !this.get('forceButtonDisabled')) {
+        return false;
+      }
+
+      return true;
+    })
+  });
+});
 define('elixirhunt/models/post', ['exports', 'ember-data'], function (exports, _emberData) {
   exports['default'] = _emberData['default'].Model.extend({
     title: _emberData['default'].attr('string'),
@@ -695,6 +740,61 @@ define('elixirhunt/services/ajax', ['exports', 'ember-ajax/services/ajax'], func
     }
   });
 });
+define('elixirhunt/services/auth-admin', ['exports', 'ember', 'elixirhunt/config/environment'], function (exports, _ember, _elixirhuntConfigEnvironment) {
+  exports['default'] = _ember['default'].Service.extend({
+
+    /**
+     * authenticate - Authenticate the admin
+     *
+     * @param  {string} password Password of the admin
+     * @return {defered}
+     */
+    authenticate: function authenticate(password) {
+      return _ember['default'].$.ajax({
+        method: 'POST',
+        url: _elixirhuntConfigEnvironment['default'].auth.admin.authenticateEndpoint,
+        data: {
+          password: password
+        }
+      });
+    },
+
+    /**
+     * revoke - Delete the session of the admin
+     *
+     * @return {defered}
+     */
+    revoke: function revoke() {
+      return _ember['default'].$.ajax({
+        method: 'GET',
+        url: _elixirhuntConfigEnvironment['default'].auth.admin.revokeEndpoint
+      });
+    },
+
+    /**
+     * isAuthenticated - Check if authenticated
+     *
+     * @return {promise}
+     */
+    isAuthenticated: function isAuthenticated() {
+      return new _ember['default'].RSVP.Promise(function (resolve, reject) {
+        _ember['default'].$.ajax({
+          method: 'GET',
+          url: _elixirhuntConfigEnvironment['default'].auth.admin.isAuthenticatedEndpoint
+        }).then(function (response) {
+          if (response.connected) {
+            resolve();
+          } else {
+            reject();
+          }
+        }, function () {
+          reject();
+        });
+      });
+    }
+
+  });
+});
 define('elixirhunt/services/ember-load-config', ['exports', 'ember-load/services/ember-load-config', 'elixirhunt/config/environment'], function (exports, _emberLoadServicesEmberLoadConfig, _elixirhuntConfigEnvironment) {
   var userConfig = _elixirhuntConfigEnvironment['default']['ember-load'] || {};
 
@@ -744,6 +844,67 @@ define('elixirhunt/services/keen', ['exports', 'ember', 'elixirhunt/config/envir
         }
 
     });
+});
+define('elixirhunt/services/notification', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Service.extend({
+
+    /**
+     * Flag to know if a notification is shown
+     * @type {Boolean}
+     */
+    isShown: false,
+
+    /**
+     * Display an error notification
+     * @param  {String}   message  The message to show
+     * @param  {Function} callback Will be called after the notification close
+     * @return void
+     */
+    error: function error(message, callback) {
+      this._send('error', message, callback);
+    },
+
+    /**
+     * Display a success notification
+     * @param  {String}   message  The message to show
+     * @param  {Function} callback Will be called after the notification close
+     * @return void
+     */
+    success: function success(message, callback) {
+      this._send('success', message, callback);
+    },
+
+    _send: function _send(type, message, callback) {
+      var _this = this;
+
+      if (!this.get('isShown')) {
+
+        this.set('isShown', true);
+
+        noty({
+          type: type,
+          text: message,
+          animation: {
+            open: 'animated flipInX',
+            close: 'animated flipOutX'
+          },
+          timeout: 2200,
+          maxVisible: 1,
+          killer: true,
+          callback: {
+            afterClose: function afterClose() {
+              _this.set('isShown', false);
+
+              if (_ember['default'].typeOf(callback) === 'function') {
+                return callback();
+              }
+            }
+          }
+
+        });
+      }
+    }
+  });
 });
 define("elixirhunt/templates/admin", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
@@ -803,7 +964,7 @@ define("elixirhunt/templates/admin/auth/login", ["exports"], function (exports) 
             "column": 0
           },
           "end": {
-            "line": 25,
+            "line": 27,
             "column": 0
           }
         },
@@ -824,61 +985,68 @@ define("elixirhunt/templates/admin/auth/login", ["exports"], function (exports) 
         var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
         var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "login__main");
+        dom.setAttribute(el3, "class", "gr-5 gr-centered");
         var el4 = dom.createTextNode("\n      ");
         dom.appendChild(el3, el4);
         var el4 = dom.createElement("div");
-        dom.setAttribute(el4, "class", "login__content");
+        dom.setAttribute(el4, "class", "login__main");
         var el5 = dom.createTextNode("\n        ");
         dom.appendChild(el4, el5);
         var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "login__logo");
+        dom.setAttribute(el5, "class", "login__content");
         var el6 = dom.createTextNode("\n          ");
         dom.appendChild(el5, el6);
-        var el6 = dom.createElement("img");
-        dom.setAttribute(el6, "src", "/assets/images/knight.png");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n        ");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("form");
-        var el6 = dom.createTextNode("\n\n          ");
-        dom.appendChild(el5, el6);
         var el6 = dom.createElement("div");
-        dom.setAttribute(el6, "class", "login__input__container --radius-top --radius-bottom");
+        dom.setAttribute(el6, "class", "login__logo");
         var el7 = dom.createTextNode("\n            ");
         dom.appendChild(el6, el7);
-        var el7 = dom.createComment("");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createTextNode("\n            ");
-        dom.appendChild(el6, el7);
-        var el7 = dom.createElement("i");
-        dom.setAttribute(el7, "class", "icon-password");
+        var el7 = dom.createElement("img");
+        dom.setAttribute(el7, "src", "/assets/images/knight.png");
         dom.appendChild(el6, el7);
         var el7 = dom.createTextNode("\n          ");
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n\n          ");
+        var el6 = dom.createTextNode("\n          ");
         dom.appendChild(el5, el6);
-        var el6 = dom.createElement("div");
-        dom.setAttribute(el6, "class", "+spacer");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n\n          ");
-        dom.appendChild(el5, el6);
-        var el6 = dom.createElement("button");
-        dom.setAttribute(el6, "type", "submit");
-        var el7 = dom.createTextNode("Hello");
+        var el6 = dom.createElement("form");
+        var el7 = dom.createTextNode("\n\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "login__input__container --radius-top --radius-bottom");
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n              ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("i");
+        dom.setAttribute(el8, "class", "icon-password");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n            ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "+spacer");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("button");
+        dom.setAttribute(el7, "type", "submit");
+        var el8 = dom.createTextNode("Sign In");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n\n          ");
         dom.appendChild(el6, el7);
         dom.appendChild(el5, el6);
-        var el6 = dom.createTextNode("\n\n        ");
+        var el6 = dom.createTextNode("\n        ");
         dom.appendChild(el5, el6);
         dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n      ");
+        var el5 = dom.createTextNode("\n\n      ");
         dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n\n    ");
+        var el4 = dom.createTextNode("\n    ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n  ");
@@ -892,7 +1060,7 @@ define("elixirhunt/templates/admin/auth/login", ["exports"], function (exports) 
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 1, 1, 1, 3]);
+        var element0 = dom.childAt(fragment, [0, 1, 1, 1, 1, 3]);
         var element1 = dom.childAt(element0, [5]);
         var morphs = new Array(4);
         morphs[0] = dom.createElementMorph(element0);
@@ -901,7 +1069,7 @@ define("elixirhunt/templates/admin/auth/login", ["exports"], function (exports) 
         morphs[3] = dom.createAttrMorph(element1, 'disabled');
         return morphs;
       },
-      statements: [["element", "action", ["authenticate"], ["on", "submit"], ["loc", [null, [8, 14], [8, 51]]], 0, 0], ["inline", "input", [], ["type", "password", "name", "password", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [11, 58], [11, 66]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "Enter your password", "class", "login__input__field"], ["loc", [null, [11, 12], [11, 131]]], 0, 0], ["attribute", "class", ["concat", ["button --login --large --expand ", ["subexpr", "if", [["get", "isButtonDisabled", ["loc", [null, [17, 76], [17, 92]]], 0, 0, 0, 0], "--muted"], [], ["loc", [null, [17, 71], [17, 104]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["attribute", "disabled", ["get", "isButtonDisabled", ["loc", [null, [17, 118], [17, 134]]], 0, 0, 0, 0], 0, 0, 0, 0]],
+      statements: [["element", "action", ["authenticate"], ["on", "submit"], ["loc", [null, [9, 16], [9, 53]]], 0, 0], ["inline", "input", [], ["type", "password", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [12, 44], [12, 52]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "Enter Password", "class", "login__input__field"], ["loc", [null, [12, 14], [12, 112]]], 0, 0], ["attribute", "class", ["concat", ["button --warning --large --expand ", ["subexpr", "if", [["get", "isButtonDisabled", ["loc", [null, [18, 80], [18, 96]]], 0, 0, 0, 0], "--muted"], [], ["loc", [null, [18, 75], [18, 108]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["attribute", "disabled", ["get", "isButtonDisabled", ["loc", [null, [18, 121], [18, 137]]], 0, 0, 0, 0], 0, 0, 0, 0]],
       locals: [],
       templates: []
     };
@@ -1810,6 +1978,131 @@ define("elixirhunt/templates/stats", ["exports"], function (exports) {
     };
   })());
 });
+define('elixirhunt/validators/alias', ['exports', 'ember-cp-validations/validators/alias'], function (exports, _emberCpValidationsValidatorsAlias) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsAlias['default'];
+    }
+  });
+});
+define('elixirhunt/validators/belongs-to', ['exports', 'ember-cp-validations/validators/belongs-to'], function (exports, _emberCpValidationsValidatorsBelongsTo) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsBelongsTo['default'];
+    }
+  });
+});
+define('elixirhunt/validators/collection', ['exports', 'ember-cp-validations/validators/collection'], function (exports, _emberCpValidationsValidatorsCollection) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsCollection['default'];
+    }
+  });
+});
+define('elixirhunt/validators/confirmation', ['exports', 'ember-cp-validations/validators/confirmation'], function (exports, _emberCpValidationsValidatorsConfirmation) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsConfirmation['default'];
+    }
+  });
+});
+define('elixirhunt/validators/date', ['exports', 'ember-cp-validations/validators/date'], function (exports, _emberCpValidationsValidatorsDate) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsDate['default'];
+    }
+  });
+});
+define('elixirhunt/validators/dependent', ['exports', 'ember-cp-validations/validators/dependent'], function (exports, _emberCpValidationsValidatorsDependent) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsDependent['default'];
+    }
+  });
+});
+define('elixirhunt/validators/ds-error', ['exports', 'ember-cp-validations/validators/ds-error'], function (exports, _emberCpValidationsValidatorsDsError) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsDsError['default'];
+    }
+  });
+});
+define('elixirhunt/validators/exclusion', ['exports', 'ember-cp-validations/validators/exclusion'], function (exports, _emberCpValidationsValidatorsExclusion) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsExclusion['default'];
+    }
+  });
+});
+define('elixirhunt/validators/format', ['exports', 'ember-cp-validations/validators/format'], function (exports, _emberCpValidationsValidatorsFormat) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsFormat['default'];
+    }
+  });
+});
+define('elixirhunt/validators/has-many', ['exports', 'ember-cp-validations/validators/has-many'], function (exports, _emberCpValidationsValidatorsHasMany) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsHasMany['default'];
+    }
+  });
+});
+define('elixirhunt/validators/inclusion', ['exports', 'ember-cp-validations/validators/inclusion'], function (exports, _emberCpValidationsValidatorsInclusion) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsInclusion['default'];
+    }
+  });
+});
+define('elixirhunt/validators/length', ['exports', 'ember-cp-validations/validators/length'], function (exports, _emberCpValidationsValidatorsLength) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsLength['default'];
+    }
+  });
+});
+define('elixirhunt/validators/messages', ['exports', 'ember-cp-validations/validators/messages'], function (exports, _emberCpValidationsValidatorsMessages) {
+  /**
+   * Copyright 2016, Yahoo! Inc.
+   * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+   */
+
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsMessages['default'];
+    }
+  });
+});
+define('elixirhunt/validators/number', ['exports', 'ember-cp-validations/validators/number'], function (exports, _emberCpValidationsValidatorsNumber) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsNumber['default'];
+    }
+  });
+});
+define('elixirhunt/validators/presence', ['exports', 'ember-cp-validations/validators/presence'], function (exports, _emberCpValidationsValidatorsPresence) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberCpValidationsValidatorsPresence['default'];
+    }
+  });
+});
 define('elixirhunt/views/application', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Component.extend({});
 });
@@ -1845,7 +2138,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+d8e773ee"});
+  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+7dcc00c7"});
 }
 
 /* jshint ignore:end */

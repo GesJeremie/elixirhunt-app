@@ -39,7 +39,8 @@ module.exports = function(defaults) {
   app.import('bower_components/tabletop/src/tabletop.js');
   app.import('bower_components/markdown/lib/markdown.js');
   app.import('bower_components/moment/min/moment.min.js');
-
+  app.import('bower_components/noty/js/noty/packaged/jquery.noty.packaged.js');
+  app.import('bower_components/animate.css/animate.css');
 
   return app.toTree();
 };

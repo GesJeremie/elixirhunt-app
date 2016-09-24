@@ -16,20 +16,17 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    },
-
-    firebase: {
-      apiKey: process.env.FIREBASE_API_KEY,
-      authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-      databaseURL: process.env.FIREBASE_DATABASE_URL,
-      storageBucket: '',
     }
 
   };
 
-  ENV.keen = {
-    logRequests: true
-  }
+  ENV.auth = {
+    admin: {
+      authenticateEndpoint: '/api/admin/session/create',
+      revokeEndpoint: '/api/admin/session/revoke',
+      isAuthenticatedEndpoint: '/api/admin/session/show'
+    }
+  };
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;

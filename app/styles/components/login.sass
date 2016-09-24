@@ -4,15 +4,14 @@
     bottom: 0
     left: 0
     right: 0
-    background-color: black
-    +background-gradiant
-
+    +background-with-gradiant
 
     +part(main)
-        width: 400px
-        margin: 0 auto
         padding-top: 70px
 
+    +part(logo)
+        text-align: center
+        padding-bottom: 1em
 
     +part(input)
         +part(container)
@@ -57,16 +56,6 @@
             outline: 0
 
 
-
-
-    +part(logo)
-        height: 100px
-        line-height: 100px
-        text-align: center
-        width: 100%
-        margin-bottom: 2em
-
-
     +part(footer)
         color: white
         width: 100%
@@ -77,15 +66,6 @@
         margin-bottom: 70px
 
 
-    +part(privacy)
-        color: $color-primary
-        font-weight: bold
-
-        &:hover
-            cursor: pointer
-
-
-
     +part(content)
         padding-top: 20px
 
@@ -94,51 +74,6 @@
         margin-bottom: 2px !important
         color: white
         font-weight: 400
-
-
-    +part(forgot)
-        font-weight: bold
-        font-size: 13px
-        color: $color-primary
-        display: inline-block
-
-
-        &:hover
-            cursor: pointer
-
-
-
-    +part(logged)
-        margin-bottom: 0 !important
-        margin-left: 20px
-        padding-top: 5px
-
-        +part(label)
-            font-size: 13px
-            color: white
-            display: inline-block
-            padding-top: 8px
-
-
-        +part(check)
-            margin-right: 2px
-
-
-
-    +part(btns)
-        height: 40px
-
-        +part(back)
-            display: inline-block
-            float: right
-            font-size: 13px
-            height: 40px
-            line-height: 40px
-            color: $color-primary
-
-            &:hover
-                cursor: pointer
-
 
 
 
@@ -180,13 +115,3 @@
 
             &:hover
                 cursor: pointer
-
-
-
-
-    +part(link)
-        color: $color-primary
-
-
-    +part(sep)
-        color: white

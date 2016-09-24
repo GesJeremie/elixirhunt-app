@@ -31,6 +31,12 @@
 // Setup the grid
 +gridle_setup((context: 12, gutter-width: 10px, direction: ltr, debug: true))
 
++gridle_register_state(xs, (max-width : 768px))
++gridle_register_state(sm, (min-width : 768px))
++gridle_register_state(md, (min-width : 992px))
++gridle_register_state(lg, (min-width : 1200px))
+
+
 // Generate gridle css classes to use in our html
 +gridle_generate_classes()
 
