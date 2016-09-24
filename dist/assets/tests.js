@@ -16,6 +16,15 @@ define('elixirhunt/tests/app.jshint', ['exports'], function (exports) {
     assert.ok(false, 'app.js should pass jshint.\napp.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\napp.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\napp.js: line 3, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\napp.js: line 4, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\napp.js: line 6, col 1, \'let\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\napp.js: line 13, col 3, \'object short notation\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\napp.js: line 18, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n7 errors');
   });
 });
+define('elixirhunt/tests/components/sidebar-component.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | components/sidebar-component.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'components/sidebar-component.js should pass jshint.\ncomponents/sidebar-component.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/sidebar-component.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncomponents/sidebar-component.js: line 7, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncomponents/sidebar-component.js: line 8, col 39, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\n\n4 errors');
+  });
+});
 define('elixirhunt/tests/controllers/admin/auth/login.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -168,6 +177,155 @@ define('elixirhunt/tests/helpers/start-app.jshint', ['exports'], function (expor
     assert.ok(true, 'helpers/start-app.js should pass jshint.');
   });
 });
+define('elixirhunt/tests/initializers/inject-router.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | initializers/inject-router.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'initializers/inject-router.js should pass jshint.\ninitializers/inject-router.js: line 1, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ninitializers/inject-router.js: line 6, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n2 errors');
+  });
+});
+define('elixirhunt/tests/integration/components/sidebar-component-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleForComponent)('sidebar-component', 'Integration | Component | sidebar component', {
+    integration: true
+  });
+
+  (0, _emberQunit.test)('it renders', function (assert) {
+    // Set any properties with this.set('myProperty', 'value');
+    // Handle any actions with this.on('myAction', function(val) { ... });
+
+    this.render(Ember.HTMLBars.template((function () {
+      return {
+        meta: {
+          'revision': 'Ember@2.7.3',
+          'loc': {
+            'source': null,
+            'start': {
+              'line': 1,
+              'column': 0
+            },
+            'end': {
+              'line': 1,
+              'column': 21
+            }
+          }
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment('');
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
+          dom.insertBoundary(fragment, null);
+          return morphs;
+        },
+        statements: [['content', 'sidebar-component', ['loc', [null, [1, 0], [1, 21]]], 0, 0, 0, 0]],
+        locals: [],
+        templates: []
+      };
+    })()));
+
+    assert.equal(this.$().text().trim(), '');
+
+    // Template block usage:
+    this.render(Ember.HTMLBars.template((function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            'revision': 'Ember@2.7.3',
+            'loc': {
+              'source': null,
+              'start': {
+                'line': 2,
+                'column': 4
+              },
+              'end': {
+                'line': 4,
+                'column': 4
+              }
+            }
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode('      template block text\n');
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
+
+      return {
+        meta: {
+          'revision': 'Ember@2.7.3',
+          'loc': {
+            'source': null,
+            'start': {
+              'line': 1,
+              'column': 0
+            },
+            'end': {
+              'line': 5,
+              'column': 2
+            }
+          }
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode('\n');
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment('');
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode('  ');
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [['block', 'sidebar-component', [], [], 0, null, ['loc', [null, [2, 4], [4, 26]]]]],
+        locals: [],
+        templates: [child0]
+      };
+    })()));
+
+    assert.equal(this.$().text().trim(), 'template block text');
+  });
+});
+define('elixirhunt/tests/integration/components/sidebar-component-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | integration/components/sidebar-component-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'integration/components/sidebar-component-test.js should pass jshint.');
+  });
+});
 define('elixirhunt/tests/mixins/disabled-button.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -175,6 +333,15 @@ define('elixirhunt/tests/mixins/disabled-button.jshint', ['exports'], function (
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(false, 'mixins/disabled-button.js should pass jshint.\nmixins/disabled-button.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nmixins/disabled-button.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n2 errors');
+  });
+});
+define('elixirhunt/tests/mixins/is-authenticated-admin.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | mixins/is-authenticated-admin.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'mixins/is-authenticated-admin.js should pass jshint.\nmixins/is-authenticated-admin.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nmixins/is-authenticated-admin.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nmixins/is-authenticated-admin.js: line 4, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nmixins/is-authenticated-admin.js: line 11, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\nmixins/is-authenticated-admin.js: line 19, col 14, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\nmixins/is-authenticated-admin.js: line 20, col 28, \'spread/rest operator\' is only available in ES6 (use \'esversion: 6\').\nmixins/is-authenticated-admin.js: line 22, col 15, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\n\n7 errors');
   });
 });
 define('elixirhunt/tests/models/post.jshint', ['exports'], function (exports) {
@@ -222,13 +389,22 @@ define('elixirhunt/tests/routes/admin/jobs/edit.jshint', ['exports'], function (
     assert.ok(false, 'routes/admin/jobs/edit.js should pass jshint.\nroutes/admin/jobs/edit.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/edit.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n2 errors');
   });
 });
+define('elixirhunt/tests/routes/admin/jobs/index.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/admin/jobs/index.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'routes/admin/jobs/index.js should pass jshint.\nroutes/admin/jobs/index.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/index.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/index.js: line 4, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n3 errors');
+  });
+});
 define('elixirhunt/tests/routes/admin/jobs/new.jshint', ['exports'], function (exports) {
   'use strict';
 
   QUnit.module('JSHint | routes/admin/jobs/new.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'routes/admin/jobs/new.js should pass jshint.\nroutes/admin/jobs/new.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/new.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n2 errors');
+    assert.ok(false, 'routes/admin/jobs/new.js should pass jshint.\nroutes/admin/jobs/new.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/new.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/new.js: line 4, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n3 errors');
   });
 });
 define('elixirhunt/tests/routes/index.jshint', ['exports'], function (exports) {

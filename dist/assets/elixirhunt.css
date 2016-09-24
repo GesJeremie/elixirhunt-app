@@ -2308,6 +2308,18 @@ a {
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px #fff inset; }
 
+#sidebar-wrapper {
+  position: fixed;
+  width: 15%;
+  height: 100%;
+  overflow-y: auto; }
+
+#content-wrapper {
+  width: 85%;
+  float: left;
+  margin-left: 15%;
+  margin-bottom: 3em; }
+
 .header__container {
   background: #614385;
   background: -webkit-linear-gradient(to left, #614385, #516395);
@@ -2727,6 +2739,63 @@ input:-webkit-autofill {
     width: 100%;
     padding: 0.8em 1em;
     margin-top: 1.9em; }
+
+.sidebar__container {
+  background: #364760;
+  width: 100%;
+  height: 100%; }
+
+.sidebar__logo {
+  text-align: center;
+  padding-top: 2em;
+  padding-bottom: 2em; }
+  .sidebar__logo img {
+    max-width: 70%; }
+
+.sidebar__link {
+  text-transform: uppercase; }
+  .sidebar__link:hover {
+    background-color: #233146; }
+    .sidebar__link:hover a {
+      border-left: 4px solid #5F4F84; }
+  .sidebar__link i {
+    vertical-align: middle;
+    font-size: 1.4em;
+    padding-left: 0.3em;
+    padding-right: 0.3em; }
+  .sidebar__link a {
+    color: #f0f4f6;
+    font-size: 0.85em;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: 1em;
+    border-left: 4px solid transparent; }
+    .sidebar__link a.\--active {
+      background-color: #233146;
+      border-left: 4px solid #5F4F84; }
+
+.sidebar__logout {
+  background-color: #ed5153;
+  text-align: left;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+  .sidebar__logout a {
+    color: white;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
+    text-transform: uppercase;
+    font-size: 0.8em; }
+  .sidebar__logout i {
+    vertical-align: middle;
+    font-size: 1.4em;
+    padding-left: 1em; }
 
 #noty_top_layout_container {
   display: inline-block !important;

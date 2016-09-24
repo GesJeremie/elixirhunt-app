@@ -1,0 +1,18 @@
+<div id="sidebar-wrapper">
+  <div class="sidebar__container">
+    <div class="sidebar__logo">
+      <img src="/assets/images/knight.png" />
+    </div>
+    <ul class="sidebar__links">
+      <li class="sidebar__link">
+        {{#link-to "admin.jobs" activeClass="--active" }}<i class="icon-chart-line"></i> Analytics{{/link-to}}
+      </li>
+      <li class="sidebar__link">
+        {{#link-to "admin.jobs" activeClass="--active" }}<i class="icon-customer"></i> Jobs{{/link-to}}
+      </li>
+    </ul>
+    <div class="sidebar__logout">
+      <a href="#" {{action "logout" on="click"}}><i class="icon-lock"></i> Logout</a>
+    </div>
+  </div>
+</div>

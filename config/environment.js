@@ -24,7 +24,8 @@ module.exports = function(environment) {
     admin: {
       authenticateEndpoint: '/api/admin/session/create',
       revokeEndpoint: '/api/admin/session/revoke',
-      isAuthenticatedEndpoint: '/api/admin/session/show'
+      isAuthenticatedEndpoint: '/api/admin/session/show',
+      redirectNotAuthenticated: '/admin/auth/login'
     }
   };
 

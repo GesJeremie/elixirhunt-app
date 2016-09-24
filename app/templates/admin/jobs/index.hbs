@@ -1,0 +1,11 @@
+{{sidebar-component}}
+
+<div id="content-wrapper">
+  <div class="container-fluid">
+    {{#each model as |post|}}
+      {{post.title}}<br/>
+
+      <hr>
+    {{/each}}
+  </div>
+</div>

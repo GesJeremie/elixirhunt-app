@@ -45,6 +45,21 @@ define('elixirhunt/components/ember-load-remover', ['exports', 'ember-load/compo
     }
   });
 });
+define('elixirhunt/components/sidebar-component', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Component.extend({
+    auth: _ember['default'].inject.service('auth-admin'),
+
+    actions: {
+      logout: function logout() {
+        var _this = this;
+
+        this.get('auth').revoke().then(function () {
+          _this.get('router').transitionTo('admin.auth.login');
+        });
+      }
+    }
+  });
+});
 define('elixirhunt/controllers/admin/auth/login', ['exports', 'elixirhunt/mixins/disabled-button', 'ember-cp-validations'], function (exports, _elixirhuntMixinsDisabledButton, _emberCpValidations) {
 
   var Validations = (0, _emberCpValidations.buildValidations)({
@@ -69,7 +84,9 @@ define('elixirhunt/controllers/admin/auth/login', ['exports', 'elixirhunt/mixins
         this.set('forceButtonDisabled', true);
         var password = this.get('password');
 
-        this.get('auth').authenticate(password).done(function () {}).fail(function () {
+        this.get('auth').authenticate(password).done(function () {
+          _this.transitionToRoute('admin.jobs');
+        }).fail(function () {
           _this.set('forceButtonDisabled', false);
           _this.get('notification').error('Impossible to connect with this password');
           _this.set('password', null);
@@ -521,6 +538,19 @@ define('elixirhunt/initializers/hide-loading-screen', ['exports', 'elixirhunt/in
     initialize: initialize
   };
 });
+define('elixirhunt/initializers/inject-router', ['exports'], function (exports) {
+  exports.initialize = initialize;
+
+  function initialize(application) {
+    // Injects all Ember components with a router object:
+    application.inject('component', 'router', 'router:main');
+  }
+
+  exports['default'] = {
+    name: 'inject-router',
+    initialize: initialize
+  };
+});
 define('elixirhunt/initializers/injectStore', ['exports', 'ember'], function (exports, _ember) {
 
   /*
@@ -651,6 +681,30 @@ define('elixirhunt/mixins/disabled-button', ['exports', 'ember'], function (expo
     })
   });
 });
+define('elixirhunt/mixins/is-authenticated-admin', ['exports', 'ember', 'elixirhunt/config/environment'], function (exports, _ember, _elixirhuntConfigEnvironment) {
+  exports['default'] = _ember['default'].Mixin.create({
+
+    auth: _ember['default'].inject.service('auth-admin'),
+
+    /**
+     * Check if the user can access the resource
+     */
+    beforeModel: function beforeModel(transition) {
+      var _this = this,
+          _arguments = arguments;
+
+      _ember['default'].assert('The login route cannot implement the authenticated mixin ' + 'as that leads to an infinite transitioning loop!', this.get('routeName') !== _elixirhuntConfigEnvironment['default'].auth.admin.redirectNotAuthenticated);
+
+      return this.get('auth').isAuthenticated().then(function () {
+        return _this._super.apply(_this, _arguments);
+      })['catch'](function () {
+        transition.abort();
+        _this.transitionTo(_elixirhuntConfigEnvironment['default'].auth.admin.redirectNotAuthenticated);
+      });
+    }
+
+  });
+});
 define('elixirhunt/models/post', ['exports', 'ember-data'], function (exports, _emberData) {
   exports['default'] = _emberData['default'].Model.extend({
     title: _emberData['default'].attr('string'),
@@ -704,8 +758,15 @@ define('elixirhunt/routes/404', ['exports', 'ember'], function (exports, _ember)
 define('elixirhunt/routes/admin/jobs/edit', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });
-define('elixirhunt/routes/admin/jobs/new', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend({});
+define('elixirhunt/routes/admin/jobs/index', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({
+    model: function model() {
+      return this.store.findAll('post');
+    }
+  });
+});
+define('elixirhunt/routes/admin/jobs/new', ['exports', 'ember', 'elixirhunt/mixins/is-authenticated-admin'], function (exports, _ember, _elixirhuntMixinsIsAuthenticatedAdmin) {
+  exports['default'] = _ember['default'].Route.extend(_elixirhuntMixinsIsAuthenticatedAdmin['default'], {});
 });
 define('elixirhunt/routes/index', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({
@@ -918,7 +979,7 @@ define("elixirhunt/templates/admin", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 2,
+            "line": 1,
             "column": 10
           }
         },
@@ -930,23 +991,18 @@ define("elixirhunt/templates/admin", ["exports"], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("h1");
-        var el2 = dom.createTextNode("Admin");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
-        dom.appendChild(el0, el1);
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(fragment, 2, 2, contextualElement);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["content", "outlet", ["loc", [null, [2, 0], [2, 10]]], 0, 0, 0, 0]],
+      statements: [["content", "outlet", ["loc", [null, [1, 0], [1, 10]]], 0, 0, 0, 0]],
       locals: [],
       templates: []
     };
@@ -1122,6 +1178,112 @@ define("elixirhunt/templates/admin/jobs/edit", ["exports"], function (exports) {
     };
   })());
 });
+define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 5,
+              "column": 4
+            },
+            "end": {
+              "line": 9,
+              "column": 4
+            }
+          },
+          "moduleName": "elixirhunt/templates/admin/jobs/index.hbs"
+        },
+        isEmpty: false,
+        arity: 1,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("br");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n\n      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("hr");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [["content", "post.title", ["loc", [null, [6, 6], [6, 20]]], 0, 0, 0, 0]],
+        locals: ["post"],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 11,
+            "column": 6
+          }
+        },
+        "moduleName": "elixirhunt/templates/admin/jobs/index.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "id", "content-wrapper");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "container-fluid");
+        var el3 = dom.createTextNode("\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        morphs[1] = dom.createMorphAt(dom.childAt(fragment, [2, 1]), 1, 1);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["content", "sidebar-component", ["loc", [null, [1, 0], [1, 21]]], 0, 0, 0, 0], ["block", "each", [["get", "model", ["loc", [null, [5, 12], [5, 17]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [5, 4], [9, 13]]]]],
+      locals: [],
+      templates: [child0]
+    };
+  })());
+});
 define("elixirhunt/templates/admin/jobs/new", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
@@ -1212,6 +1374,196 @@ define("elixirhunt/templates/application", ["exports"], function (exports) {
       statements: [["content", "ember-load-remover", ["loc", [null, [1, 0], [1, 22]]], 0, 0, 0, 0], ["content", "outlet", ["loc", [null, [2, 0], [2, 10]]], 0, 0, 0, 0]],
       locals: [],
       templates: []
+    };
+  })());
+});
+define("elixirhunt/templates/components/sidebar-component", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 8,
+              "column": 8
+            },
+            "end": {
+              "line": 8,
+              "column": 98
+            }
+          },
+          "moduleName": "elixirhunt/templates/components/sidebar-component.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("i");
+          dom.setAttribute(el1, "class", "icon-chart-line");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode(" Analytics");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 11,
+              "column": 8
+            },
+            "end": {
+              "line": 11,
+              "column": 91
+            }
+          },
+          "moduleName": "elixirhunt/templates/components/sidebar-component.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("i");
+          dom.setAttribute(el1, "class", "icon-customer");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode(" Jobs");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 19,
+            "column": 0
+          }
+        },
+        "moduleName": "elixirhunt/templates/components/sidebar-component.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "id", "sidebar-wrapper");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "sidebar__container");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "sidebar__logo");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("img");
+        dom.setAttribute(el4, "src", "/assets/images/knight.png");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3, "class", "sidebar__links");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        dom.setAttribute(el4, "class", "sidebar__link");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        dom.setAttribute(el4, "class", "sidebar__link");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "sidebar__logout");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("a");
+        dom.setAttribute(el4, "href", "#");
+        var el5 = dom.createElement("i");
+        dom.setAttribute(el5, "class", "icon-lock");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode(" Logout");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(element0, [3]);
+        var element2 = dom.childAt(element0, [5, 1]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]), 1, 1);
+        morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]), 1, 1);
+        morphs[2] = dom.createElementMorph(element2);
+        return morphs;
+      },
+      statements: [["block", "link-to", ["admin.jobs"], ["activeClass", "--active"], 0, null, ["loc", [null, [8, 8], [8, 110]]]], ["block", "link-to", ["admin.jobs"], ["activeClass", "--active"], 1, null, ["loc", [null, [11, 8], [11, 103]]]], ["element", "action", ["logout"], ["on", "click"], ["loc", [null, [15, 18], [15, 48]]], 0, 0]],
+      locals: [],
+      templates: [child0, child1]
     };
   })());
 });
@@ -2138,7 +2490,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+7dcc00c7"});
+  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+8a91e5f8"});
 }
 
 /* jshint ignore:end */
