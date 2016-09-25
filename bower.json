@@ -13,6 +13,7 @@
     "firebase": "^3.0.0",
     "moment-timezone": "^0.5.5",
     "noty": "^2.3.8",
-    "animate.css": "^3.5.2"
+    "animate.css": "^3.5.2",
+    "sweetalert": "^1.1.3"
   }
 }

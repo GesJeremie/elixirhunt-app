@@ -130,10 +130,21 @@ define('elixirhunt/controllers/admin/jobs/index', ['exports', 'elixirhunt/mixins
       remove: function remove(post) {
         var _this = this;
 
-        post.destroyRecord().then(function () {
-          _this.get('notification').success('Job deleted');
-        })['catch'](function () {
-          _this.get('notification').error('Impossible to delete the job');
+        swal({
+          title: 'Are you sure?',
+          text: 'You will not be able to recover this job',
+          type: 'warning',
+          showCancelButton: true,
+          closeOnConfirm: false,
+          showLoaderOnConfirm: true
+        }, function () {
+          post.destroyRecord().then(function () {
+            swal.close();
+            _this.get('notification').success('Job deleted');
+          })['catch'](function () {
+            swal.enableButtons();
+            _this.get('notification').error('Impossible to delete the job');
+          });
         });
       }
     }
@@ -3051,7 +3062,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+ed24284d"});
+  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+0163ffa2"});
 }
 
 /* jshint ignore:end */

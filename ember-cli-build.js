@@ -41,6 +41,8 @@ module.exports = function(defaults) {
   app.import('bower_components/moment/min/moment.min.js');
   app.import('bower_components/noty/js/noty/packaged/jquery.noty.packaged.js');
   app.import('bower_components/animate.css/animate.css');
+  app.import('bower_components/sweetalert/dist/sweetalert.css');
+  app.import('bower_components/sweetalert/dist/sweetalert.min.js');
 
   return app.toTree();
 };

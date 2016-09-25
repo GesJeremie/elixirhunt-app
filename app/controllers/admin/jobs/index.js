@@ -16,13 +16,25 @@ export default Ember.Controller.extend(Validations, DisabledButton, {
     },
 
     remove(post) {
-      post.destroyRecord()
-      .then(() => {
-        this.get('notification').success('Job deleted');
-      })
-      .catch(() => {
-        this.get('notification').error('Impossible to delete the job');
+      swal({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this job',
+        type: 'warning',
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true
+      }, () => {
+        post.destroyRecord()
+          .then(() => {
+            swal.close();
+            this.get('notification').success('Job deleted');
+          })
+          .catch(() => {
+            swal.enableButtons();
+            this.get('notification').error('Impossible to delete the job');
+          });
       });
+      
     }
   }
 
