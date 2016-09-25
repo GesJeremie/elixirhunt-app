@@ -75,7 +75,7 @@
 
     {{#if post.visible}}
       <div class="post__apply">
-        <a href="#" {{action "apply" post on="click" }}>Apply for this job</a>
+        <a href="{{post.url}}" target="_blank" {{action "apply" post on="click" }}>Apply for this job</a>
       </div>
     {{/if}}
   {{/each}}
