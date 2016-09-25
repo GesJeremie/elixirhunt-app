@@ -64,6 +64,17 @@ export default Ember.Component.extend(Validations, DisabledButton, {
 
       this.get('post').save()
       .then(() => {
+
+        if (this.get('type') == 'new') {
+          // Send IFTTT maker
+          Ember.$.get('/api/ifttt/maker', {
+            event: 'new_job_offer',
+            value1: this.get('post.title'),
+            value2: this.get('post.company'),
+            value3: this.get('post.location')
+          });
+        }
+
         this.get('notification').success(this.get('labelNotificationSuccess'));
         this.set('forceButtonDisabled', false);
         this.get('router').transitionTo('admin.jobs');

@@ -104,6 +104,17 @@ define('elixirhunt/components/admin/jobs/form-component', ['exports', 'ember', '
         this.set('forceButtonDisabled', true);
 
         this.get('post').save().then(function () {
+
+          if (_this.get('type') == 'new') {
+            // Send IFTTT maker
+            _ember['default'].$.get('/api/ifttt/maker', {
+              event: 'new_job_offer',
+              value1: _this.get('post.title'),
+              value2: _this.get('post.company'),
+              value3: _this.get('post.location')
+            });
+          }
+
           _this.get('notification').success(_this.get('labelNotificationSuccess'));
           _this.set('forceButtonDisabled', false);
           _this.get('router').transitionTo('admin.jobs');
@@ -3676,7 +3687,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+1ba8fb3b"});
+  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+01ebb278"});
 }
 
 /* jshint ignore:end */
