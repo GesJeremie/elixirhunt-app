@@ -12,6 +12,15 @@ const Validations = buildValidations({
 export default Ember.Component.extend(Validations, DisabledButton, {
   auth: Ember.inject.service('auth-admin'),
 
+  /**
+   * Clean record if not saved
+   */
+  willDestroyElement() {
+    if (this.get('post.hasDirtyAttributes')) {
+      this.get('post').rollbackAttributes();
+    }
+  },
+
   actions: {
     toggleShow(post) {
       post.toggleProperty('visible');

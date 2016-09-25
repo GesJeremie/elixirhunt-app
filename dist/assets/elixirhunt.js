@@ -52,6 +52,15 @@ define('elixirhunt/components/admin/jobs/form-component', ['exports', 'ember', '
   exports['default'] = _ember['default'].Component.extend(Validations, _elixirhuntMixinsDisabledButton['default'], {
     auth: _ember['default'].inject.service('auth-admin'),
 
+    /**
+     * Clean record if not saved
+     */
+    willDestroyElement: function willDestroyElement() {
+      if (this.get('post.hasDirtyAttributes')) {
+        this.get('post').rollbackAttributes();
+      }
+    },
+
     actions: {
       toggleShow: function toggleShow(post) {
         post.toggleProperty('visible');
