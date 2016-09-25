@@ -395,7 +395,7 @@ define('elixirhunt/tests/router.jshint', ['exports'], function (exports) {
   QUnit.module('JSHint | router.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'router.js should pass jshint.\nrouter.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nrouter.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nrouter.js: line 4, col 1, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\nrouter.js: line 26, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n4 errors');
+    assert.ok(false, 'router.js should pass jshint.\nrouter.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nrouter.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nrouter.js: line 4, col 1, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\nrouter.js: line 28, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n4 errors');
   });
 });
 define('elixirhunt/tests/routes/404.jshint', ['exports'], function (exports) {
@@ -443,6 +443,15 @@ define('elixirhunt/tests/routes/admin/jobs/new.jshint', ['exports'], function (e
     assert.ok(false, 'routes/admin/jobs/new.js should pass jshint.\nroutes/admin/jobs/new.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/new.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/new.js: line 4, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/new.js: line 5, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n4 errors');
   });
 });
+define('elixirhunt/tests/routes/admin/stats.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/admin/stats.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'routes/admin/stats.js should pass jshint.\nroutes/admin/stats.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/stats.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/stats.js: line 4, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/stats.js: line 8, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n4 errors');
+  });
+});
 define('elixirhunt/tests/routes/index.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -450,15 +459,6 @@ define('elixirhunt/tests/routes/index.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(false, 'routes/index.js should pass jshint.\nroutes/index.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/index.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/index.js: line 5, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n3 errors');
-  });
-});
-define('elixirhunt/tests/routes/stats.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | routes/stats.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(false, 'routes/stats.js should pass jshint.\nroutes/stats.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/stats.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/stats.js: line 7, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n3 errors');
   });
 });
 define('elixirhunt/tests/serializers/post.jshint', ['exports'], function (exports) {

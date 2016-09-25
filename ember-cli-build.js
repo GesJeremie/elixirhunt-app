@@ -6,8 +6,7 @@ module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     dotEnv: {
       clientAllowedKeys: [
-        'KEEN_PROJECT_ID', 'KEEN_WRITE_KEY', 'KEEN_READ_KEY',
-        'FIREBASE_API_KEY', 'FIREBASE_AUTH_DOMAIN', 'FIREBASE_DATABASE_URL'
+        'KEEN_PROJECT_ID', 'KEEN_WRITE_KEY', 'KEEN_READ_KEY'
       ],
       path: {
         development: './.env.dev',

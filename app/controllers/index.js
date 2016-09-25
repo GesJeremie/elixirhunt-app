@@ -41,7 +41,7 @@ export default Ember.Controller.extend({
       value1: post.get('title')
     });
 
-    window.open(post.get('apply'), '_blank');
+    window.open(post.get('url'), '_blank');
   },
 
   onSubscribe() {

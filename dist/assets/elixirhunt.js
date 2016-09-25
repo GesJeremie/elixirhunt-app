@@ -277,7 +277,7 @@ define('elixirhunt/controllers/index', ['exports'], function (exports) {
         value1: post.get('title')
       });
 
-      window.open(post.get('apply'), '_blank');
+      window.open(post.get('url'), '_blank');
     },
 
     onSubscribe: function onSubscribe() {
@@ -910,12 +910,14 @@ define('elixirhunt/router', ['exports', 'ember', 'elixirhunt/config/environment'
   });
 
   Router.map(function () {
-    this.route('stats');
 
     this.route('admin', function () {
       this.route('auth', function () {
         this.route('login');
       });
+
+      this.route('stats');
+
       this.route('jobs', function () {
         this.route('new');
         this.route('edit', { path: '/:job_id/edit' });
@@ -964,17 +966,8 @@ define('elixirhunt/routes/admin/jobs/new', ['exports', 'ember', 'elixirhunt/mixi
     }
   });
 });
-define('elixirhunt/routes/index', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend({
-
-    model: function model() {
-      return this.store.findAll('post');
-    }
-
-  });
-});
-define('elixirhunt/routes/stats', ['exports', 'ember'], function (exports, _ember) {
-    exports['default'] = _ember['default'].Route.extend({
+define('elixirhunt/routes/admin/stats', ['exports', 'ember', 'elixirhunt/mixins/is-authenticated-admin'], function (exports, _ember, _elixirhuntMixinsIsAuthenticatedAdmin) {
+    exports['default'] = _ember['default'].Route.extend(_elixirhuntMixinsIsAuthenticatedAdmin['default'], {
 
         keen: _ember['default'].inject.service(),
 
@@ -988,6 +981,15 @@ define('elixirhunt/routes/stats', ['exports', 'ember'], function (exports, _embe
         }
 
     });
+});
+define('elixirhunt/routes/index', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Route.extend({
+
+    model: function model() {
+      return this.store.findAll('post');
+    }
+
+  });
 });
 define('elixirhunt/serializers/post', ['exports', 'ember-data'], function (exports, _emberData) {
   exports['default'] = _emberData['default'].RESTSerializer.extend({
@@ -1835,6 +1837,218 @@ define("elixirhunt/templates/admin/jobs/new", ["exports"], function (exports) {
     };
   })());
 });
+define("elixirhunt/templates/admin/stats", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 47,
+            "column": 6
+          }
+        },
+        "moduleName": "elixirhunt/templates/admin/stats.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "id", "content-wrapper");
+        var el2 = dom.createTextNode("\n  \n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "container-fluid");
+        var el3 = dom.createTextNode("\n    \n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "stats__container");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "gr-3");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "stats__item --highlight");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__count");
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__description");
+        var el7 = dom.createTextNode("Clicks on apply");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__timeframe");
+        var el7 = dom.createTextNode("Today");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "gr-3");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "stats__item");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__count");
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__description");
+        var el7 = dom.createTextNode("Clicks on apply");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__timeframe");
+        var el7 = dom.createTextNode("This week");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "gr-3");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "stats__item");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__count");
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__description");
+        var el7 = dom.createTextNode("Clicks on apply");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__timeframe");
+        var el7 = dom.createTextNode("This month");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "gr-3");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "stats__item");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__count");
+        var el7 = dom.createComment("");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__description");
+        var el7 = dom.createTextNode("Clicks on apply");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "stats__timeframe");
+        var el7 = dom.createTextNode("This year");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [2]);
+        var element1 = dom.childAt(element0, [3, 1]);
+        var morphs = new Array(6);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        morphs[1] = dom.createMorphAt(element0, 1, 1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element1, [1, 1, 1]), 0, 0);
+        morphs[3] = dom.createMorphAt(dom.childAt(element1, [3, 1, 1]), 0, 0);
+        morphs[4] = dom.createMorphAt(dom.childAt(element1, [5, 1, 1]), 0, 0);
+        morphs[5] = dom.createMorphAt(dom.childAt(element1, [7, 1, 1]), 0, 0);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["content", "admin.sidebar-component", ["loc", [null, [1, 0], [1, 27]]], 0, 0, 0, 0], ["inline", "admin.header-component", [], ["title", "Analytics", "description", "See the different statistics"], ["loc", [null, [5, 2], [7, 48]]], 0, 0], ["content", "model.apply_clicks_this_day.result", ["loc", [null, [14, 36], [14, 76]]], 0, 0, 0, 0], ["content", "model.apply_clicks_this_week.result", ["loc", [null, [23, 36], [23, 77]]], 0, 0, 0, 0], ["content", "model.apply_clicks_this_month.result", ["loc", [null, [31, 36], [31, 78]]], 0, 0, 0, 0], ["content", "model.apply_clicks_this_year.result", ["loc", [null, [39, 36], [39, 77]]], 0, 0, 0, 0]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
 define("elixirhunt/templates/application", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
@@ -2577,7 +2791,7 @@ define("elixirhunt/templates/components/admin/sidebar-component", ["exports"], f
             },
             "end": {
               "line": 8,
-              "column": 98
+              "column": 99
             }
           },
           "moduleName": "elixirhunt/templates/components/admin/sidebar-component.hbs"
@@ -2747,7 +2961,7 @@ define("elixirhunt/templates/components/admin/sidebar-component", ["exports"], f
         morphs[2] = dom.createElementMorph(element2);
         return morphs;
       },
-      statements: [["block", "link-to", ["admin.jobs"], ["activeClass", "--active"], 0, null, ["loc", [null, [8, 8], [8, 110]]]], ["block", "link-to", ["admin.jobs"], ["activeClass", "--active"], 1, null, ["loc", [null, [11, 8], [11, 103]]]], ["element", "action", ["logout"], ["on", "click"], ["loc", [null, [15, 18], [15, 48]]], 0, 0]],
+      statements: [["block", "link-to", ["admin.stats"], ["activeClass", "--active"], 0, null, ["loc", [null, [8, 8], [8, 111]]]], ["block", "link-to", ["admin.jobs"], ["activeClass", "--active"], 1, null, ["loc", [null, [11, 8], [11, 103]]]], ["element", "action", ["logout"], ["on", "click"], ["loc", [null, [15, 18], [15, 48]]], 0, 0]],
       locals: [],
       templates: [child0, child1]
     };
@@ -2883,7 +3097,7 @@ define("elixirhunt/templates/index", ["exports"], function (exports) {
             var el2 = dom.createTextNode("\n        ");
             dom.appendChild(el1, el2);
             var el2 = dom.createElement("a");
-            dom.setAttribute(el2, "target", "_blank");
+            dom.setAttribute(el2, "href", "#");
             var el3 = dom.createTextNode("Apply for this job");
             dom.appendChild(el2, el3);
             dom.appendChild(el1, el2);
@@ -2896,12 +3110,11 @@ define("elixirhunt/templates/index", ["exports"], function (exports) {
           },
           buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
             var element0 = dom.childAt(fragment, [1, 1]);
-            var morphs = new Array(2);
-            morphs[0] = dom.createAttrMorph(element0, 'href');
-            morphs[1] = dom.createElementMorph(element0);
+            var morphs = new Array(1);
+            morphs[0] = dom.createElementMorph(element0);
             return morphs;
           },
-          statements: [["attribute", "href", ["concat", [["get", "post.url", ["loc", [null, [78, 56], [78, 64]]], 0, 0, 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["element", "action", ["apply", ["get", "post", ["loc", [null, [78, 28], [78, 32]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [78, 11], [78, 46]]], 0, 0]],
+          statements: [["element", "action", ["apply", ["get", "post", ["loc", [null, [78, 37], [78, 41]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [78, 20], [78, 55]]], 0, 0]],
           locals: [],
           templates: []
         };
@@ -3302,220 +3515,6 @@ define("elixirhunt/templates/index", ["exports"], function (exports) {
     };
   })());
 });
-define("elixirhunt/templates/stats", ["exports"], function (exports) {
-  exports["default"] = Ember.HTMLBars.template((function () {
-    return {
-      meta: {
-        "revision": "Ember@2.7.3",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 44,
-            "column": 6
-          }
-        },
-        "moduleName": "elixirhunt/templates/stats.hbs"
-      },
-      isEmpty: false,
-      arity: 0,
-      cachedFragment: null,
-      hasRendered: false,
-      buildFragment: function buildFragment(dom) {
-        var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("div");
-        dom.setAttribute(el1, "class", "header__container");
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "container");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "header__title");
-        var el4 = dom.createTextNode("Stats of elixir hunt");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n");
-        dom.appendChild(el0, el1);
-        var el1 = dom.createElement("div");
-        dom.setAttribute(el1, "class", "container");
-        var el2 = dom.createTextNode("\n  \n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "stats__container");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "gr-3");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("div");
-        dom.setAttribute(el4, "class", "stats__item --highlight");
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__count");
-        var el6 = dom.createComment("");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__description");
-        var el6 = dom.createTextNode("Clicks on apply");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__timeframe");
-        var el6 = dom.createTextNode("Today");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n      ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n\n\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "gr-3");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("div");
-        dom.setAttribute(el4, "class", "stats__item");
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__count");
-        var el6 = dom.createComment("");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__description");
-        var el6 = dom.createTextNode("Clicks on apply");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__timeframe");
-        var el6 = dom.createTextNode("This week");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n      ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "gr-3");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("div");
-        dom.setAttribute(el4, "class", "stats__item");
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__count");
-        var el6 = dom.createComment("");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__description");
-        var el6 = dom.createTextNode("Clicks on apply");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__timeframe");
-        var el6 = dom.createTextNode("This month");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n      ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "gr-3");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("div");
-        dom.setAttribute(el4, "class", "stats__item");
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__count");
-        var el6 = dom.createComment("");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__description");
-        var el6 = dom.createTextNode("Clicks on apply");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createElement("div");
-        dom.setAttribute(el5, "class", "stats__timeframe");
-        var el6 = dom.createTextNode("This year");
-        dom.appendChild(el5, el6);
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n      ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n\n");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        return el0;
-      },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [2, 1]);
-        var morphs = new Array(4);
-        morphs[0] = dom.createMorphAt(dom.childAt(element0, [1, 1, 1]), 0, 0);
-        morphs[1] = dom.createMorphAt(dom.childAt(element0, [3, 1, 1]), 0, 0);
-        morphs[2] = dom.createMorphAt(dom.childAt(element0, [5, 1, 1]), 0, 0);
-        morphs[3] = dom.createMorphAt(dom.childAt(element0, [7, 1, 1]), 0, 0);
-        return morphs;
-      },
-      statements: [["content", "model.apply_clicks_this_day.result", ["loc", [null, [12, 34], [12, 74]]], 0, 0, 0, 0], ["content", "model.apply_clicks_this_week.result", ["loc", [null, [21, 34], [21, 75]]], 0, 0, 0, 0], ["content", "model.apply_clicks_this_month.result", ["loc", [null, [29, 34], [29, 76]]], 0, 0, 0, 0], ["content", "model.apply_clicks_this_year.result", ["loc", [null, [37, 34], [37, 75]]], 0, 0, 0, 0]],
-      locals: [],
-      templates: []
-    };
-  })());
-});
 define('elixirhunt/validators/alias', ['exports', 'ember-cp-validations/validators/alias'], function (exports, _emberCpValidationsValidatorsAlias) {
   Object.defineProperty(exports, 'default', {
     enumerable: true,
@@ -3676,7 +3675,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+0163ffa2"});
+  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+87adb73b"});
 }
 
 /* jshint ignore:end */
