@@ -16,10 +16,37 @@ export default Ember.Component.extend(Validations, DisabledButton, {
    * Clean record if not saved
    */
   willDestroyElement() {
-    if (this.get('post.hasDirtyAttributes')) {
+    if (this.get('post.hasDirtyAttributes') && !this.get('post.isSaving')) {
       this.get('post').rollbackAttributes();
     }
   },
+
+  labelButton: Ember.computed('type', function() {
+    const labels = {
+      'new': 'Create job',
+      'edit': 'Update job'
+    };
+
+    return labels[this.get('type')];
+  }),
+
+  labelNotificationError: Ember.computed('label', function() {
+    const labels = {
+      'new': 'Impossible to create the job',
+      'edit': 'Impossible to update the job'
+    };
+
+    return labels[this.get('type')];
+  }),
+
+  labelNotificationSuccess: Ember.computed('label', function() {
+    const labels = {
+      'new': 'Job created!',
+      'edit': 'Job updated!'
+    };
+
+    return labels[this.get('type')];
+  }),
 
   actions: {
     toggleShow(post) {
@@ -37,13 +64,13 @@ export default Ember.Component.extend(Validations, DisabledButton, {
 
       this.get('post').save()
       .then(() => {
-        this.get('notification').success('New job added!');
+        this.get('notification').success(this.get('labelNotificationSuccess'));
         this.set('forceButtonDisabled', false);
         this.get('router').transitionTo('admin.jobs');
       })
       .catch(() => {
         this.set('forceButtonDisabled', false);
-        this.get('notification').error('Impossible to save the record!');
+        this.get('notification').error(this.get('labelNotificationError'));
       });
     }
   }
