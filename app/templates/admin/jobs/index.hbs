@@ -29,7 +29,7 @@
 
         {{#each model as |post| }}
           <div class="listing__result">
-            <div class="listing__content">
+            <div {{action "showMore" post}} class="listing__content">
               <div class="gr-3">
                 <h3 class="listing__detail">{{post.title}}</h3>
               </div>
@@ -44,8 +44,10 @@
               </div>
               <div class="clear"></div>
             </div>
-            {{#if post.displayMore}}
+            {{#if post.showMore}}
               <div class="listing__more">
+                {{#link-to "admin.jobs.edit" post.id class="button --warning"}}Edit{{/link-to}}
+                <a href="#" {{action "remove" post}} class="button --danger">Delete</a>
               </div>
             {{/if}}
           </div>

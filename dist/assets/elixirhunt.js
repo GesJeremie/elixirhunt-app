@@ -111,6 +111,35 @@ define('elixirhunt/controllers/admin/auth/login', ['exports', 'elixirhunt/mixins
 
   });
 });
+define('elixirhunt/controllers/admin/jobs/index', ['exports', 'elixirhunt/mixins/disabled-button', 'ember-cp-validations'], function (exports, _elixirhuntMixinsDisabledButton, _emberCpValidations) {
+
+  var Validations = (0, _emberCpValidations.buildValidations)({
+    password: (0, _emberCpValidations.validator)('presence', true)
+  });
+
+  exports['default'] = Ember.Controller.extend(Validations, _elixirhuntMixinsDisabledButton['default'], {
+
+    auth: Ember.inject.service('auth-admin'),
+    notification: Ember.inject.service(),
+
+    actions: {
+      showMore: function showMore(post) {
+        post.toggleProperty('showMore');
+      },
+
+      remove: function remove(post) {
+        var _this = this;
+
+        post.destroyRecord().then(function () {
+          _this.get('notification').success('Job deleted');
+        })['catch'](function () {
+          _this.get('notification').error('Impossible to delete the job');
+        });
+      }
+    }
+
+  });
+});
 define('elixirhunt/controllers/index', ['exports'], function (exports) {
   exports['default'] = Ember.Controller.extend({
 
@@ -817,7 +846,7 @@ define('elixirhunt/router', ['exports', 'ember', 'elixirhunt/config/environment'
       });
       this.route('jobs', function () {
         this.route('new');
-        this.route('edit');
+        this.route('edit', { path: '/:job_id/edit' });
       });
     });
 
@@ -1284,6 +1313,41 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
   exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
       var child0 = (function () {
+        var child0 = (function () {
+          return {
+            meta: {
+              "revision": "Ember@2.7.3",
+              "loc": {
+                "source": null,
+                "start": {
+                  "line": 49,
+                  "column": 16
+                },
+                "end": {
+                  "line": 49,
+                  "column": 83
+                }
+              },
+              "moduleName": "elixirhunt/templates/admin/jobs/index.hbs"
+            },
+            isEmpty: false,
+            arity: 0,
+            cachedFragment: null,
+            hasRendered: false,
+            buildFragment: function buildFragment(dom) {
+              var el0 = dom.createDocumentFragment();
+              var el1 = dom.createTextNode("Edit");
+              dom.appendChild(el0, el1);
+              return el0;
+            },
+            buildRenderNodes: function buildRenderNodes() {
+              return [];
+            },
+            statements: [],
+            locals: [],
+            templates: []
+          };
+        })();
         return {
           meta: {
             "revision": "Ember@2.7.3",
@@ -1294,7 +1358,7 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
                 "column": 12
               },
               "end": {
-                "line": 50,
+                "line": 52,
                 "column": 12
               }
             },
@@ -1310,6 +1374,18 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
             dom.appendChild(el0, el1);
             var el1 = dom.createElement("div");
             dom.setAttribute(el1, "class", "listing__more");
+            var el2 = dom.createTextNode("\n                ");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createComment("");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createTextNode("\n                ");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createElement("a");
+            dom.setAttribute(el2, "href", "#");
+            dom.setAttribute(el2, "class", "button --danger");
+            var el3 = dom.createTextNode("Delete");
+            dom.appendChild(el2, el3);
+            dom.appendChild(el1, el2);
             var el2 = dom.createTextNode("\n              ");
             dom.appendChild(el1, el2);
             dom.appendChild(el0, el1);
@@ -1317,12 +1393,17 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
             dom.appendChild(el0, el1);
             return el0;
           },
-          buildRenderNodes: function buildRenderNodes() {
-            return [];
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var element0 = dom.childAt(fragment, [1]);
+            var element1 = dom.childAt(element0, [3]);
+            var morphs = new Array(2);
+            morphs[0] = dom.createMorphAt(element0, 1, 1);
+            morphs[1] = dom.createElementMorph(element1);
+            return morphs;
           },
-          statements: [],
+          statements: [["block", "link-to", ["admin.jobs.edit", ["get", "post.id", ["loc", [null, [49, 45], [49, 52]]], 0, 0, 0, 0]], ["class", "button --warning"], 0, null, ["loc", [null, [49, 16], [49, 95]]]], ["element", "action", ["remove", ["get", "post", ["loc", [null, [50, 46], [50, 50]]], 0, 0, 0, 0]], [], ["loc", [null, [50, 28], [50, 52]]], 0, 0]],
           locals: [],
-          templates: []
+          templates: [child0]
         };
       })();
       return {
@@ -1335,7 +1416,7 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
               "column": 8
             },
             "end": {
-              "line": 52,
+              "line": 54,
               "column": 8
             }
           },
@@ -1431,17 +1512,18 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element0 = dom.childAt(fragment, [1]);
-          var element1 = dom.childAt(element0, [1]);
-          var morphs = new Array(5);
-          morphs[0] = dom.createMorphAt(dom.childAt(element1, [1, 1]), 0, 0);
-          morphs[1] = dom.createMorphAt(dom.childAt(element1, [3, 1]), 0, 0);
-          morphs[2] = dom.createMorphAt(dom.childAt(element1, [5, 1]), 0, 0);
-          morphs[3] = dom.createMorphAt(dom.childAt(element1, [7, 1]), 0, 0);
-          morphs[4] = dom.createMorphAt(element0, 3, 3);
+          var element2 = dom.childAt(fragment, [1]);
+          var element3 = dom.childAt(element2, [1]);
+          var morphs = new Array(6);
+          morphs[0] = dom.createElementMorph(element3);
+          morphs[1] = dom.createMorphAt(dom.childAt(element3, [1, 1]), 0, 0);
+          morphs[2] = dom.createMorphAt(dom.childAt(element3, [3, 1]), 0, 0);
+          morphs[3] = dom.createMorphAt(dom.childAt(element3, [5, 1]), 0, 0);
+          morphs[4] = dom.createMorphAt(dom.childAt(element3, [7, 1]), 0, 0);
+          morphs[5] = dom.createMorphAt(element2, 3, 3);
           return morphs;
         },
-        statements: [["content", "post.title", ["loc", [null, [34, 44], [34, 58]]], 0, 0, 0, 0], ["content", "post.company", ["loc", [null, [37, 43], [37, 59]]], 0, 0, 0, 0], ["content", "post.location", ["loc", [null, [40, 43], [40, 60]]], 0, 0, 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [43, 61], [43, 75]]], 0, 0, 0, 0]], [], ["loc", [null, [43, 43], [43, 77]]], 0, 0], ["block", "if", [["get", "post.displayMore", ["loc", [null, [47, 18], [47, 34]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [47, 12], [50, 19]]]]],
+        statements: [["element", "action", ["showMore", ["get", "post", ["loc", [null, [32, 37], [32, 41]]], 0, 0, 0, 0]], [], ["loc", [null, [32, 17], [32, 43]]], 0, 0], ["content", "post.title", ["loc", [null, [34, 44], [34, 58]]], 0, 0, 0, 0], ["content", "post.company", ["loc", [null, [37, 43], [37, 59]]], 0, 0, 0, 0], ["content", "post.location", ["loc", [null, [40, 43], [40, 60]]], 0, 0, 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [43, 61], [43, 75]]], 0, 0, 0, 0]], [], ["loc", [null, [43, 43], [43, 77]]], 0, 0], ["block", "if", [["get", "post.showMore", ["loc", [null, [47, 18], [47, 31]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [47, 12], [52, 19]]]]],
         locals: ["post"],
         templates: [child0]
       };
@@ -1456,7 +1538,7 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
             "column": 0
           },
           "end": {
-            "line": 58,
+            "line": 60,
             "column": 6
           }
         },
@@ -1577,15 +1659,15 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element2 = dom.childAt(fragment, [2]);
+        var element4 = dom.childAt(fragment, [2]);
         var morphs = new Array(3);
         morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-        morphs[1] = dom.createMorphAt(element2, 1, 1);
-        morphs[2] = dom.createMorphAt(dom.childAt(element2, [3, 1, 1]), 3, 3);
+        morphs[1] = dom.createMorphAt(element4, 1, 1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element4, [3, 1, 1]), 3, 3);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["content", "admin.sidebar-component", ["loc", [null, [1, 0], [1, 27]]], 0, 0, 0, 0], ["inline", "admin.header-component", [], ["title", "Jobs", "description", "Manage the job offers", "buttonLink", "admin.jobs.new", "buttonText", "New Job"], ["loc", [null, [5, 2], [9, 26]]], 0, 0], ["block", "each", [["get", "model", ["loc", [null, [30, 16], [30, 21]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [30, 8], [52, 17]]]]],
+      statements: [["content", "admin.sidebar-component", ["loc", [null, [1, 0], [1, 27]]], 0, 0, 0, 0], ["inline", "admin.header-component", [], ["title", "Jobs", "description", "Manage the job offers", "buttonLink", "admin.jobs.new", "buttonText", "New Job"], ["loc", [null, [5, 2], [9, 26]]], 0, 0], ["block", "each", [["get", "model", ["loc", [null, [30, 16], [30, 21]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [30, 8], [54, 17]]]]],
       locals: [],
       templates: [child0]
     };

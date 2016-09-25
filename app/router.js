@@ -15,7 +15,7 @@ Router.map(function() {
     });
     this.route('jobs', function() {
       this.route('new');
-      this.route('edit');
+      this.route('edit', {path: '/:job_id/edit'});
     });
   });
 
