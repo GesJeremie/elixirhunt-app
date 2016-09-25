@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="+spacer"></div>
   <div class="gr-6">
-    <form>
+    <form {{action "save" on="submit"}}>
       <div class="form__container">
         <label>Title</label>
         {{input type="text" value=post.title}}

@@ -58,7 +58,7 @@
         <div class="post__location"><i class="icon-location"></i> {{if-empty post.location }}</div>
       </div>
       <div class="gr-2">
-        <div class="post__date"><i class="icon-clock"></i> {{humanize-date post.date }}</div>
+        <div class="post__date"><i class="icon-clock"></i> {{moment-from-now post.createdAt }}</div>
 
       </div>
       <div class="clear"></div>

@@ -50,7 +50,7 @@ define('elixirhunt/components/admin/jobs/form-component', ['exports', 'ember', '
   });
 
   exports['default'] = _ember['default'].Component.extend(Validations, _elixirhuntMixinsDisabledButton['default'], {
-    auth: _ember['default'].inject.service('auth-admin'),
+    notification: _ember['default'].inject.service(),
 
     /**
      * Clean record if not saved
@@ -64,6 +64,26 @@ define('elixirhunt/components/admin/jobs/form-component', ['exports', 'ember', '
     actions: {
       toggleShow: function toggleShow(post) {
         post.toggleProperty('visible');
+      },
+
+      save: function save() {
+        var _this = this;
+
+        // Security
+        if (!this.get('validations.isValid')) {
+          return;
+        }
+
+        this.set('forceButtonDisabled', true);
+
+        this.get('post').save().then(function () {
+          _this.get('notification').success('New job added!');
+          _this.set('forceButtonDisabled', false);
+          _this.get('router').transitionTo('admin.jobs');
+        })['catch'](function () {
+          _this.set('forceButtonDisabled', false);
+          _this.get('notification').error('Impossible to save the record!');
+        });
       }
     }
   });
@@ -320,23 +340,6 @@ define('elixirhunt/helpers/gte', ['exports', 'ember', 'ember-truth-helpers/helpe
   }
 
   exports['default'] = forExport;
-});
-define('elixirhunt/helpers/humanize-date', ['exports', 'ember'], function (exports, _ember) {
-  var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
-
-  exports.humanizeDate = humanizeDate;
-
-  function humanizeDate(_ref) {
-    var _ref2 = _slicedToArray(_ref, 1);
-
-    var date = _ref2[0];
-
-    var now = moment();
-
-    return moment(date).from(now);
-  }
-
-  exports['default'] = _ember['default'].Helper.helper(humanizeDate);
 });
 define('elixirhunt/helpers/if-empty', ['exports', 'ember'], function (exports, _ember) {
   exports.ifEmpty = ifEmpty;
@@ -860,7 +863,7 @@ define('elixirhunt/models/post', ['exports', 'ember-data'], function (exports, _
     company: _emberData['default'].attr('string'),
     content: _emberData['default'].attr('string'),
     logo: _emberData['default'].attr('string'),
-    apply: _emberData['default'].attr('string'),
+    url: _emberData['default'].attr('string'),
     location: _emberData['default'].attr('string'),
     createdAt: _emberData['default'].attr('string'),
     updatedAt: _emberData['default'].attr('string')
@@ -1566,7 +1569,7 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
           morphs[5] = dom.createMorphAt(element2, 3, 3);
           return morphs;
         },
-        statements: [["element", "action", ["showMore", ["get", "post", ["loc", [null, [32, 37], [32, 41]]], 0, 0, 0, 0]], [], ["loc", [null, [32, 17], [32, 43]]], 0, 0], ["content", "post.title", ["loc", [null, [34, 44], [34, 58]]], 0, 0, 0, 0], ["content", "post.company", ["loc", [null, [37, 43], [37, 59]]], 0, 0, 0, 0], ["content", "post.location", ["loc", [null, [40, 43], [40, 60]]], 0, 0, 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [43, 61], [43, 75]]], 0, 0, 0, 0]], [], ["loc", [null, [43, 43], [43, 77]]], 0, 0], ["block", "if", [["get", "post.showMore", ["loc", [null, [47, 18], [47, 31]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [47, 12], [52, 19]]]]],
+        statements: [["element", "action", ["showMore", ["get", "post", ["loc", [null, [32, 37], [32, 41]]], 0, 0, 0, 0]], [], ["loc", [null, [32, 17], [32, 43]]], 0, 0], ["content", "post.title", ["loc", [null, [34, 44], [34, 58]]], 0, 0, 0, 0], ["inline", "if-empty", [["get", "post.company", ["loc", [null, [37, 54], [37, 66]]], 0, 0, 0, 0]], [], ["loc", [null, [37, 43], [37, 68]]], 0, 0], ["content", "post.location", ["loc", [null, [40, 43], [40, 60]]], 0, 0, 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [43, 61], [43, 75]]], 0, 0, 0, 0]], [], ["loc", [null, [43, 43], [43, 77]]], 0, 0], ["block", "if", [["get", "post.showMore", ["loc", [null, [47, 18], [47, 31]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [47, 12], [52, 19]]]]],
         locals: ["post"],
         templates: [child0]
       };
@@ -2470,31 +2473,32 @@ define("elixirhunt/templates/components/admin/jobs/form-component", ["exports"],
         var element11 = dom.childAt(element2, [5]);
         var element12 = dom.childAt(element11, [1]);
         var element13 = dom.childAt(element12, [1]);
-        var morphs = new Array(21);
-        morphs[0] = dom.createMorphAt(element4, 3, 3);
-        morphs[1] = dom.createMorphAt(dom.childAt(element4, [5]), 0, 0);
-        morphs[2] = dom.createMorphAt(element5, 3, 3);
-        morphs[3] = dom.createMorphAt(dom.childAt(element5, [5]), 0, 0);
-        morphs[4] = dom.createMorphAt(element6, 3, 3);
-        morphs[5] = dom.createMorphAt(dom.childAt(element6, [5]), 0, 0);
-        morphs[6] = dom.createMorphAt(element7, 3, 3);
-        morphs[7] = dom.createMorphAt(dom.childAt(element7, [5]), 0, 0);
-        morphs[8] = dom.createMorphAt(element8, 3, 3);
-        morphs[9] = dom.createMorphAt(dom.childAt(element8, [5]), 0, 0);
-        morphs[10] = dom.createMorphAt(element9, 3, 3);
-        morphs[11] = dom.createMorphAt(dom.childAt(element9, [5]), 0, 0);
-        morphs[12] = dom.createAttrMorph(element10, 'class');
-        morphs[13] = dom.createAttrMorph(element10, 'disabled');
-        morphs[14] = dom.createElementMorph(element12);
-        morphs[15] = dom.createMorphAt(dom.childAt(element13, [1]), 0, 0);
-        morphs[16] = dom.createMorphAt(dom.childAt(element13, [3]), 0, 0);
-        morphs[17] = dom.createMorphAt(dom.childAt(element12, [3, 1]), 2, 2);
-        morphs[18] = dom.createMorphAt(dom.childAt(element12, [5, 1]), 2, 2);
-        morphs[19] = dom.createMorphAt(element12, 9, 9);
-        morphs[20] = dom.createMorphAt(element11, 3, 3);
+        var morphs = new Array(22);
+        morphs[0] = dom.createElementMorph(element3);
+        morphs[1] = dom.createMorphAt(element4, 3, 3);
+        morphs[2] = dom.createMorphAt(dom.childAt(element4, [5]), 0, 0);
+        morphs[3] = dom.createMorphAt(element5, 3, 3);
+        morphs[4] = dom.createMorphAt(dom.childAt(element5, [5]), 0, 0);
+        morphs[5] = dom.createMorphAt(element6, 3, 3);
+        morphs[6] = dom.createMorphAt(dom.childAt(element6, [5]), 0, 0);
+        morphs[7] = dom.createMorphAt(element7, 3, 3);
+        morphs[8] = dom.createMorphAt(dom.childAt(element7, [5]), 0, 0);
+        morphs[9] = dom.createMorphAt(element8, 3, 3);
+        morphs[10] = dom.createMorphAt(dom.childAt(element8, [5]), 0, 0);
+        morphs[11] = dom.createMorphAt(element9, 3, 3);
+        morphs[12] = dom.createMorphAt(dom.childAt(element9, [5]), 0, 0);
+        morphs[13] = dom.createAttrMorph(element10, 'class');
+        morphs[14] = dom.createAttrMorph(element10, 'disabled');
+        morphs[15] = dom.createElementMorph(element12);
+        morphs[16] = dom.createMorphAt(dom.childAt(element13, [1]), 0, 0);
+        morphs[17] = dom.createMorphAt(dom.childAt(element13, [3]), 0, 0);
+        morphs[18] = dom.createMorphAt(dom.childAt(element12, [3, 1]), 2, 2);
+        morphs[19] = dom.createMorphAt(dom.childAt(element12, [5, 1]), 2, 2);
+        morphs[20] = dom.createMorphAt(element12, 9, 9);
+        morphs[21] = dom.createMorphAt(element11, 3, 3);
         return morphs;
       },
-      statements: [["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.title", ["loc", [null, [7, 34], [7, 44]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [7, 8], [7, 46]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.title"], [], [], 0, 0], "message"], [], ["loc", [null, [8, 41], [8, 78]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.company", ["loc", [null, [15, 34], [15, 46]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [15, 8], [15, 48]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.company"], [], [], 0, 0], "message"], [], ["loc", [null, [16, 41], [16, 80]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.location", ["loc", [null, [23, 34], [23, 47]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [23, 8], [23, 49]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.location"], [], [], 0, 0], "message"], [], ["loc", [null, [24, 41], [24, 81]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.logo", ["loc", [null, [31, 34], [31, 43]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [31, 8], [31, 45]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.logo"], [], [], 0, 0], "message"], [], ["loc", [null, [32, 41], [32, 77]]], 0, 0], ["inline", "textarea", [], ["value", ["subexpr", "@mut", [["get", "post.content", ["loc", [null, [39, 25], [39, 37]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [39, 8], [39, 39]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.content"], [], [], 0, 0], "message"], [], ["loc", [null, [40, 41], [40, 80]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.url", ["loc", [null, [47, 34], [47, 42]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [47, 8], [47, 44]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.url"], [], [], 0, 0], "message"], [], ["loc", [null, [48, 41], [48, 76]]], 0, 0], ["attribute", "class", ["concat", ["button --large ", ["subexpr", "if", [["get", "isButtonDisabled", ["loc", [null, [53, 55], [53, 71]]], 0, 0, 0, 0], "--muted"], [], ["loc", [null, [53, 50], [53, 83]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["attribute", "disabled", ["get", "isButtonDisabled", ["loc", [null, [53, 96], [53, 112]]], 0, 0, 0, 0], 0, 0, 0, 0], ["element", "action", ["toggleShow", ["get", "post", ["loc", [null, [59, 55], [59, 59]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [59, 33], [59, 72]]], 0, 0], ["content", "post.title", ["loc", [null, [62, 33], [62, 49]]], 0, 0, 0, 0], ["inline", "if-empty", [["get", "post.company", ["loc", [null, [63, 46], [63, 58]]], 0, 0, 0, 0]], [], ["loc", [null, [63, 35], [63, 61]]], 0, 0], ["inline", "if-empty", [["get", "post.location", ["loc", [null, [66, 77], [66, 90]]], 0, 0, 0, 0]], [], ["loc", [null, [66, 66], [66, 93]]], 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [69, 77], [69, 91]]], 0, 0, 0, 0]], [], ["loc", [null, [69, 59], [69, 94]]], 0, 0], ["block", "if", [["get", "post.visible", ["loc", [null, [74, 12], [74, 24]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [74, 6], [81, 13]]]], ["block", "if", [["get", "post.visible", ["loc", [null, [84, 10], [84, 22]]], 0, 0, 0, 0]], [], 1, null, ["loc", [null, [84, 4], [88, 11]]]]],
+      statements: [["element", "action", ["save"], ["on", "submit"], ["loc", [null, [4, 10], [4, 39]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.title", ["loc", [null, [7, 34], [7, 44]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [7, 8], [7, 46]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.title"], [], [], 0, 0], "message"], [], ["loc", [null, [8, 41], [8, 78]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.company", ["loc", [null, [15, 34], [15, 46]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [15, 8], [15, 48]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.company"], [], [], 0, 0], "message"], [], ["loc", [null, [16, 41], [16, 80]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.location", ["loc", [null, [23, 34], [23, 47]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [23, 8], [23, 49]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.location"], [], [], 0, 0], "message"], [], ["loc", [null, [24, 41], [24, 81]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.logo", ["loc", [null, [31, 34], [31, 43]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [31, 8], [31, 45]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.logo"], [], [], 0, 0], "message"], [], ["loc", [null, [32, 41], [32, 77]]], 0, 0], ["inline", "textarea", [], ["value", ["subexpr", "@mut", [["get", "post.content", ["loc", [null, [39, 25], [39, 37]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [39, 8], [39, 39]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.content"], [], [], 0, 0], "message"], [], ["loc", [null, [40, 41], [40, 80]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.url", ["loc", [null, [47, 34], [47, 42]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [47, 8], [47, 44]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.url"], [], [], 0, 0], "message"], [], ["loc", [null, [48, 41], [48, 76]]], 0, 0], ["attribute", "class", ["concat", ["button --large ", ["subexpr", "if", [["get", "isButtonDisabled", ["loc", [null, [53, 55], [53, 71]]], 0, 0, 0, 0], "--muted"], [], ["loc", [null, [53, 50], [53, 83]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["attribute", "disabled", ["get", "isButtonDisabled", ["loc", [null, [53, 96], [53, 112]]], 0, 0, 0, 0], 0, 0, 0, 0], ["element", "action", ["toggleShow", ["get", "post", ["loc", [null, [59, 55], [59, 59]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [59, 33], [59, 72]]], 0, 0], ["content", "post.title", ["loc", [null, [62, 33], [62, 49]]], 0, 0, 0, 0], ["inline", "if-empty", [["get", "post.company", ["loc", [null, [63, 46], [63, 58]]], 0, 0, 0, 0]], [], ["loc", [null, [63, 35], [63, 61]]], 0, 0], ["inline", "if-empty", [["get", "post.location", ["loc", [null, [66, 77], [66, 90]]], 0, 0, 0, 0]], [], ["loc", [null, [66, 66], [66, 93]]], 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [69, 77], [69, 91]]], 0, 0, 0, 0]], [], ["loc", [null, [69, 59], [69, 94]]], 0, 0], ["block", "if", [["get", "post.visible", ["loc", [null, [74, 12], [74, 24]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [74, 6], [81, 13]]]], ["block", "if", [["get", "post.visible", ["loc", [null, [84, 10], [84, 22]]], 0, 0, 0, 0]], [], 1, null, ["loc", [null, [84, 4], [88, 11]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -2960,7 +2964,7 @@ define("elixirhunt/templates/index", ["exports"], function (exports) {
           dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["element", "action", ["toggleShow", ["get", "post", ["loc", [null, [51, 55], [51, 59]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [51, 33], [51, 72]]], 0, 0], ["content", "post.title", ["loc", [null, [54, 33], [54, 49]]], 0, 0, 0, 0], ["inline", "if-empty", [["get", "post.company", ["loc", [null, [55, 46], [55, 58]]], 0, 0, 0, 0]], [], ["loc", [null, [55, 35], [55, 61]]], 0, 0], ["inline", "if-empty", [["get", "post.location", ["loc", [null, [58, 77], [58, 90]]], 0, 0, 0, 0]], [], ["loc", [null, [58, 66], [58, 93]]], 0, 0], ["inline", "humanize-date", [["get", "post.date", ["loc", [null, [61, 75], [61, 84]]], 0, 0, 0, 0]], [], ["loc", [null, [61, 59], [61, 87]]], 0, 0], ["block", "if", [["get", "post.visible", ["loc", [null, [66, 12], [66, 24]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [66, 6], [73, 13]]]], ["block", "if", [["get", "post.visible", ["loc", [null, [76, 10], [76, 22]]], 0, 0, 0, 0]], [], 1, null, ["loc", [null, [76, 4], [80, 11]]]]],
+        statements: [["element", "action", ["toggleShow", ["get", "post", ["loc", [null, [51, 55], [51, 59]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [51, 33], [51, 72]]], 0, 0], ["content", "post.title", ["loc", [null, [54, 33], [54, 49]]], 0, 0, 0, 0], ["inline", "if-empty", [["get", "post.company", ["loc", [null, [55, 46], [55, 58]]], 0, 0, 0, 0]], [], ["loc", [null, [55, 35], [55, 61]]], 0, 0], ["inline", "if-empty", [["get", "post.location", ["loc", [null, [58, 77], [58, 90]]], 0, 0, 0, 0]], [], ["loc", [null, [58, 66], [58, 93]]], 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [61, 77], [61, 91]]], 0, 0, 0, 0]], [], ["loc", [null, [61, 59], [61, 94]]], 0, 0], ["block", "if", [["get", "post.visible", ["loc", [null, [66, 12], [66, 24]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [66, 6], [73, 13]]]], ["block", "if", [["get", "post.visible", ["loc", [null, [76, 10], [76, 22]]], 0, 0, 0, 0]], [], 1, null, ["loc", [null, [76, 4], [80, 11]]]]],
         locals: ["post"],
         templates: [child0, child1]
       };

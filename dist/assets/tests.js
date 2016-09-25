@@ -31,7 +31,7 @@ define('elixirhunt/tests/components/admin/jobs/form-component.jshint', ['exports
   QUnit.module('JSHint | components/admin/jobs/form-component.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'components/admin/jobs/form-component.js should pass jshint.\ncomponents/admin/jobs/form-component.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 3, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 5, col 1, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncomponents/admin/jobs/form-component.js: line 12, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 18, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncomponents/admin/jobs/form-component.js: line 25, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n7 errors');
+    assert.ok(false, 'components/admin/jobs/form-component.js should pass jshint.\ncomponents/admin/jobs/form-component.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 3, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 5, col 1, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncomponents/admin/jobs/form-component.js: line 12, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 18, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncomponents/admin/jobs/form-component.js: line 25, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncomponents/admin/jobs/form-component.js: line 29, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncomponents/admin/jobs/form-component.js: line 39, col 14, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 44, col 15, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\n\n10 errors');
   });
 });
 define('elixirhunt/tests/components/admin/sidebar-component.jshint', ['exports'], function (exports) {
@@ -84,15 +84,6 @@ define('elixirhunt/tests/helpers/destroy-app.jshint', ['exports'], function (exp
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'helpers/destroy-app.js should pass jshint.');
-  });
-});
-define('elixirhunt/tests/helpers/humanize-date.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | helpers/humanize-date.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(false, 'helpers/humanize-date.js should pass jshint.\nhelpers/humanize-date.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nhelpers/humanize-date.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nhelpers/humanize-date.js: line 3, col 29, \'destructuring binding\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\nhelpers/humanize-date.js: line 4, col 3, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\nhelpers/humanize-date.js: line 9, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\n\n5 errors');
   });
 });
 define('elixirhunt/tests/helpers/if-empty.jshint', ['exports'], function (exports) {
