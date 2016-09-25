@@ -1,0 +1,47 @@
++component(listing)
+  
+  +part(container)
+    margin-top: 1em
+
+  +part(result)
+    background-color: white
+    border-bottom: 1px solid darken($color-grey, 2%)
+
+    &:hover
+      background-color: lighten($color-grey, 10%)
+
+    +option(no-hover)
+      &:hover
+        background-color: white
+
+
+    +option(header)
+      border-top-left-radius: 3px
+      border-top-right-radius: 3px
+      &:hover
+        cursor: normal
+        background-color: white
+
+  +part(content)
+    padding: 1em
+
+    &:hover
+      cursor: pointer
+
+    +option(no-hover)
+      &:hover
+        cursor: default
+
+
+  +part(detail)
+    font-size: 0.8em
+
+  +part(header)
+    font-size: 0.9em
+    font-weight: bold
+
+  +part(more)
+    padding-left: 1em
+    padding-bottom: 1em
+
+

@@ -2797,6 +2797,58 @@ input:-webkit-autofill {
     font-size: 1.4em;
     padding-left: 1em; }
 
+.header-admin__container {
+  background-color: white;
+  min-height: 4.5em;
+  padding-top: 1.8em;
+  padding-bottom: 1.8em;
+  border-bottom: 2px solid #e8ecf4; }
+
+.header-admin__title {
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 1.4em;
+  color: #647387; }
+
+.header-admin__description {
+  color: #A3B3C0;
+  font-size: 0.9em; }
+
+.listing__container {
+  margin-top: 1em; }
+
+.listing__result {
+  background-color: white;
+  border-bottom: 1px solid #f2f4f9; }
+  .listing__result:hover {
+    background-color: white; }
+  .listing__result.\--no-hover:hover {
+    background-color: white; }
+  .listing__result.\--header {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px; }
+    .listing__result.\--header:hover {
+      cursor: normal;
+      background-color: white; }
+
+.listing__content {
+  padding: 1em; }
+  .listing__content:hover {
+    cursor: pointer; }
+  .listing__content.\--no-hover:hover {
+    cursor: default; }
+
+.listing__detail {
+  font-size: 0.8em; }
+
+.listing__header {
+  font-size: 0.9em;
+  font-weight: bold; }
+
+.listing__more {
+  padding-left: 1em;
+  padding-bottom: 1em; }
+
 #noty_top_layout_container {
   display: inline-block !important;
   text-align: center !important; }

@@ -24,6 +24,8 @@ export default Ember.Controller.extend(Validations, DisabledButton, {
 
       this.get('auth').authenticate(password)
       .done(() => {
+        this.set('forceButtonDisabled', false);
+        this.set('password', null);
         this.transitionToRoute('admin.jobs');
       })
       .fail(() => {

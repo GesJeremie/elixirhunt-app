@@ -8,7 +8,15 @@
 
 define('elixirhunt/adapters/application', ['exports', 'ember-data'], function (exports, _emberData) {
   exports['default'] = _emberData['default'].RESTAdapter.extend({
-    namespace: 'api'
+    // Application specific overrides go here
+    namespace: 'api',
+
+    pathForType: function pathForType(modelName) {
+      var decamelized = Ember.String.decamelize(modelName);
+
+      return Ember.String.pluralize(decamelized);
+    }
+
   });
 });
 define('elixirhunt/app', ['exports', 'ember', 'elixirhunt/resolver', 'ember-load-initializers', 'elixirhunt/config/environment'], function (exports, _ember, _elixirhuntResolver, _emberLoadInitializers, _elixirhuntConfigEnvironment) {
@@ -27,6 +35,26 @@ define('elixirhunt/app', ['exports', 'ember', 'elixirhunt/resolver', 'ember-load
 
   exports['default'] = App;
 });
+define('elixirhunt/components/admin/header-component', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Component.extend({
+    hasButton: _ember['default'].computed.and('buttonText', 'buttonLink')
+  });
+});
+define('elixirhunt/components/admin/sidebar-component', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Component.extend({
+    auth: _ember['default'].inject.service('auth-admin'),
+
+    actions: {
+      logout: function logout() {
+        var _this = this;
+
+        this.get('auth').revoke().then(function () {
+          _this.get('router').transitionTo('admin.auth.login');
+        });
+      }
+    }
+  });
+});
 define('elixirhunt/components/app-version', ['exports', 'ember-cli-app-version/components/app-version', 'elixirhunt/config/environment'], function (exports, _emberCliAppVersionComponentsAppVersion, _elixirhuntConfigEnvironment) {
 
   var name = _elixirhuntConfigEnvironment['default'].APP.name;
@@ -42,21 +70,6 @@ define('elixirhunt/components/ember-load-remover', ['exports', 'ember-load/compo
     enumerable: true,
     get: function get() {
       return _emberLoadComponentsEmberLoadRemover['default'];
-    }
-  });
-});
-define('elixirhunt/components/sidebar-component', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Component.extend({
-    auth: _ember['default'].inject.service('auth-admin'),
-
-    actions: {
-      logout: function logout() {
-        var _this = this;
-
-        this.get('auth').revoke().then(function () {
-          _this.get('router').transitionTo('admin.auth.login');
-        });
-      }
     }
   });
 });
@@ -85,6 +98,8 @@ define('elixirhunt/controllers/admin/auth/login', ['exports', 'elixirhunt/mixins
         var password = this.get('password');
 
         this.get('auth').authenticate(password).done(function () {
+          _this.set('forceButtonDisabled', false);
+          _this.set('password', null);
           _this.transitionToRoute('admin.jobs');
         }).fail(function () {
           _this.set('forceButtonDisabled', false);
@@ -271,6 +286,11 @@ define('elixirhunt/helpers/if-empty', ['exports', 'ember'], function (exports, _
 
   exports['default'] = _ember['default'].Helper.helper(ifEmpty);
 });
+define('elixirhunt/helpers/is-after', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/is-after'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersIsAfter) {
+  exports['default'] = _emberMomentHelpersIsAfter['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
 define('elixirhunt/helpers/is-array', ['exports', 'ember', 'ember-truth-helpers/helpers/is-array'], function (exports, _ember, _emberTruthHelpersHelpersIsArray) {
 
   var forExport = null;
@@ -282,6 +302,31 @@ define('elixirhunt/helpers/is-array', ['exports', 'ember', 'ember-truth-helpers/
   }
 
   exports['default'] = forExport;
+});
+define('elixirhunt/helpers/is-before', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/is-before'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersIsBefore) {
+  exports['default'] = _emberMomentHelpersIsBefore['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
+define('elixirhunt/helpers/is-between', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/is-between'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersIsBetween) {
+  exports['default'] = _emberMomentHelpersIsBetween['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
+define('elixirhunt/helpers/is-same-or-after', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/is-same-or-after'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersIsSameOrAfter) {
+  exports['default'] = _emberMomentHelpersIsSameOrAfter['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
+define('elixirhunt/helpers/is-same-or-before', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/is-same-or-before'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersIsSameOrBefore) {
+  exports['default'] = _emberMomentHelpersIsSameOrBefore['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
+define('elixirhunt/helpers/is-same', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/is-same'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersIsSame) {
+  exports['default'] = _emberMomentHelpersIsSame['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
 });
 define('elixirhunt/helpers/lt', ['exports', 'ember', 'ember-truth-helpers/helpers/lt'], function (exports, _ember, _emberTruthHelpersHelpersLt) {
 
@@ -326,6 +371,34 @@ define('elixirhunt/helpers/markdown-decode', ['exports', 'ember'], function (exp
 
   exports['default'] = _ember['default'].Helper.helper(markdownDecode);
 });
+define('elixirhunt/helpers/moment-calendar', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/moment-calendar'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersMomentCalendar) {
+  exports['default'] = _emberMomentHelpersMomentCalendar['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
+define('elixirhunt/helpers/moment-duration', ['exports', 'ember-moment/helpers/moment-duration'], function (exports, _emberMomentHelpersMomentDuration) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberMomentHelpersMomentDuration['default'];
+    }
+  });
+});
+define('elixirhunt/helpers/moment-format', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/moment-format'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersMomentFormat) {
+  exports['default'] = _emberMomentHelpersMomentFormat['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
+define('elixirhunt/helpers/moment-from-now', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/moment-from-now'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersMomentFromNow) {
+  exports['default'] = _emberMomentHelpersMomentFromNow['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
+define('elixirhunt/helpers/moment-to-now', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/helpers/moment-to-now'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentHelpersMomentToNow) {
+  exports['default'] = _emberMomentHelpersMomentToNow['default'].extend({
+    globalAllowEmpty: !!_ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.allowEmpty')
+  });
+});
 define('elixirhunt/helpers/nl2br', ['exports', 'ember'], function (exports, _ember) {
   var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
@@ -367,6 +440,14 @@ define('elixirhunt/helpers/not', ['exports', 'ember', 'ember-truth-helpers/helpe
   }
 
   exports['default'] = forExport;
+});
+define('elixirhunt/helpers/now', ['exports', 'ember-moment/helpers/now'], function (exports, _emberMomentHelpersNow) {
+  Object.defineProperty(exports, 'default', {
+    enumerable: true,
+    get: function get() {
+      return _emberMomentHelpersNow['default'];
+    }
+  });
 });
 define('elixirhunt/helpers/or', ['exports', 'ember', 'ember-truth-helpers/helpers/or'], function (exports, _ember, _emberTruthHelpersHelpersOr) {
 
@@ -713,9 +794,8 @@ define('elixirhunt/models/post', ['exports', 'ember-data'], function (exports, _
     logo: _emberData['default'].attr('string'),
     apply: _emberData['default'].attr('string'),
     location: _emberData['default'].attr('string'),
-    date: _emberData['default'].attr('string'),
-    createdAt: _emberData['default'].attr('date'),
-    updatedAt: _emberData['default'].attr('date')
+    createdAt: _emberData['default'].attr('string'),
+    updatedAt: _emberData['default'].attr('string')
   });
 });
 define('elixirhunt/resolver', ['exports', 'ember-resolver'], function (exports, _emberResolver) {
@@ -792,6 +872,23 @@ define('elixirhunt/routes/stats', ['exports', 'ember'], function (exports, _embe
         }
 
     });
+});
+define('elixirhunt/serializers/post', ['exports', 'ember-data'], function (exports, _emberData) {
+  exports['default'] = _emberData['default'].RESTSerializer.extend({
+
+    attrs: {
+      createdAt: {
+        serialize: false
+      },
+      updatedAt: {
+        serialize: false
+      }
+    },
+
+    keyForAttribute: function keyForAttribute(attr) {
+      return Ember.String.underscore(attr);
+    }
+  });
 });
 define('elixirhunt/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (exports, _emberAjaxServicesAjax) {
   Object.defineProperty(exports, 'default', {
@@ -905,6 +1002,11 @@ define('elixirhunt/services/keen', ['exports', 'ember', 'elixirhunt/config/envir
         }
 
     });
+});
+define('elixirhunt/services/moment', ['exports', 'ember', 'elixirhunt/config/environment', 'ember-moment/services/moment'], function (exports, _ember, _elixirhuntConfigEnvironment, _emberMomentServicesMoment) {
+  exports['default'] = _emberMomentServicesMoment['default'].extend({
+    defaultFormat: _ember['default'].get(_elixirhuntConfigEnvironment['default'], 'moment.outputFormat')
+  });
 });
 define('elixirhunt/services/notification', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Service.extend({
@@ -1181,18 +1283,60 @@ define("elixirhunt/templates/admin/jobs/edit", ["exports"], function (exports) {
 define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "revision": "Ember@2.7.3",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 47,
+                "column": 12
+              },
+              "end": {
+                "line": 50,
+                "column": 12
+              }
+            },
+            "moduleName": "elixirhunt/templates/admin/jobs/index.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("              ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createElement("div");
+            dom.setAttribute(el1, "class", "listing__more");
+            var el2 = dom.createTextNode("\n              ");
+            dom.appendChild(el1, el2);
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
       return {
         meta: {
           "revision": "Ember@2.7.3",
           "loc": {
             "source": null,
             "start": {
-              "line": 5,
-              "column": 4
+              "line": 30,
+              "column": 8
             },
             "end": {
-              "line": 9,
-              "column": 4
+              "line": 52,
+              "column": 8
             }
           },
           "moduleName": "elixirhunt/templates/admin/jobs/index.hbs"
@@ -1203,28 +1347,103 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("      ");
+          var el1 = dom.createTextNode("          ");
           dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("br");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n\n      ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("hr");
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1, "class", "listing__result");
+          var el2 = dom.createTextNode("\n            ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("div");
+          dom.setAttribute(el2, "class", "listing__content");
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3, "class", "gr-3");
+          var el4 = dom.createTextNode("\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("h3");
+          dom.setAttribute(el4, "class", "listing__detail");
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n              ");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3, "class", "gr-3");
+          var el4 = dom.createTextNode("\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("p");
+          dom.setAttribute(el4, "class", "listing__detail");
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n              ");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3, "class", "gr-3");
+          var el4 = dom.createTextNode("\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("p");
+          dom.setAttribute(el4, "class", "listing__detail");
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n              ");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3, "class", "gr-3");
+          var el4 = dom.createTextNode("\n                ");
+          dom.appendChild(el3, el4);
+          var el4 = dom.createElement("p");
+          dom.setAttribute(el4, "class", "listing__detail");
+          var el5 = dom.createComment("");
+          dom.appendChild(el4, el5);
+          dom.appendChild(el3, el4);
+          var el4 = dom.createTextNode("\n              ");
+          dom.appendChild(el3, el4);
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n              ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createElement("div");
+          dom.setAttribute(el3, "class", "clear");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n            ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("          ");
+          dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var morphs = new Array(1);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          var element0 = dom.childAt(fragment, [1]);
+          var element1 = dom.childAt(element0, [1]);
+          var morphs = new Array(5);
+          morphs[0] = dom.createMorphAt(dom.childAt(element1, [1, 1]), 0, 0);
+          morphs[1] = dom.createMorphAt(dom.childAt(element1, [3, 1]), 0, 0);
+          morphs[2] = dom.createMorphAt(dom.childAt(element1, [5, 1]), 0, 0);
+          morphs[3] = dom.createMorphAt(dom.childAt(element1, [7, 1]), 0, 0);
+          morphs[4] = dom.createMorphAt(element0, 3, 3);
           return morphs;
         },
-        statements: [["content", "post.title", ["loc", [null, [6, 6], [6, 20]]], 0, 0, 0, 0]],
+        statements: [["content", "post.title", ["loc", [null, [34, 44], [34, 58]]], 0, 0, 0, 0], ["content", "post.company", ["loc", [null, [37, 43], [37, 59]]], 0, 0, 0, 0], ["content", "post.location", ["loc", [null, [40, 43], [40, 60]]], 0, 0, 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [43, 61], [43, 75]]], 0, 0, 0, 0]], [], ["loc", [null, [43, 43], [43, 77]]], 0, 0], ["block", "if", [["get", "post.displayMore", ["loc", [null, [47, 18], [47, 34]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [47, 12], [50, 19]]]]],
         locals: ["post"],
-        templates: []
+        templates: [child0]
       };
     })();
     return {
@@ -1237,7 +1456,7 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
             "column": 0
           },
           "end": {
-            "line": 11,
+            "line": 58,
             "column": 6
           }
         },
@@ -1255,15 +1474,101 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
         dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "id", "content-wrapper");
-        var el2 = dom.createTextNode("\n  ");
+        var el2 = dom.createTextNode("\n  \n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("div");
         dom.setAttribute(el2, "class", "container-fluid");
-        var el3 = dom.createTextNode("\n");
+        var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
-        var el3 = dom.createComment("");
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "listing__container");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "listing__result --header");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "listing__content");
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "gr-3");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("h3");
+        dom.setAttribute(el7, "class", "listing__header");
+        var el8 = dom.createTextNode("Title");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "gr-3");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("p");
+        dom.setAttribute(el7, "class", "listing__header");
+        var el8 = dom.createTextNode("Company");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "gr-3");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("p");
+        dom.setAttribute(el7, "class", "listing__header");
+        var el8 = dom.createTextNode("Location");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "gr-3");
+        var el7 = dom.createTextNode("\n            ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("p");
+        dom.setAttribute(el7, "class", "listing__header");
+        var el8 = dom.createTextNode("Created At");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n          ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n          ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "clear");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n        ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("  ");
+        var el3 = dom.createTextNode("\n  ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
@@ -1272,13 +1577,15 @@ define("elixirhunt/templates/admin/jobs/index", ["exports"], function (exports) 
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(2);
+        var element2 = dom.childAt(fragment, [2]);
+        var morphs = new Array(3);
         morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-        morphs[1] = dom.createMorphAt(dom.childAt(fragment, [2, 1]), 1, 1);
+        morphs[1] = dom.createMorphAt(element2, 1, 1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element2, [3, 1, 1]), 3, 3);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["content", "sidebar-component", ["loc", [null, [1, 0], [1, 21]]], 0, 0, 0, 0], ["block", "each", [["get", "model", ["loc", [null, [5, 12], [5, 17]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [5, 4], [9, 13]]]]],
+      statements: [["content", "admin.sidebar-component", ["loc", [null, [1, 0], [1, 27]]], 0, 0, 0, 0], ["inline", "admin.header-component", [], ["title", "Jobs", "description", "Manage the job offers", "buttonLink", "admin.jobs.new", "buttonText", "New Job"], ["loc", [null, [5, 2], [9, 26]]], 0, 0], ["block", "each", [["get", "model", ["loc", [null, [30, 16], [30, 21]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [30, 8], [52, 17]]]]],
       locals: [],
       templates: [child0]
     };
@@ -1377,7 +1684,179 @@ define("elixirhunt/templates/application", ["exports"], function (exports) {
     };
   })());
 });
-define("elixirhunt/templates/components/sidebar-component", ["exports"], function (exports) {
+define("elixirhunt/templates/components/admin/header-component", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "revision": "Ember@2.7.3",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 10,
+                "column": 10
+              },
+              "end": {
+                "line": 10,
+                "column": 70
+              }
+            },
+            "moduleName": "elixirhunt/templates/components/admin/header-component.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createComment("");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var morphs = new Array(1);
+            morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+            dom.insertBoundary(fragment, 0);
+            dom.insertBoundary(fragment, null);
+            return morphs;
+          },
+          statements: [["content", "buttonText", ["loc", [null, [10, 56], [10, 70]]], 0, 0, 0, 0]],
+          locals: [],
+          templates: []
+        };
+      })();
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 7,
+              "column": 4
+            },
+            "end": {
+              "line": 13,
+              "column": 4
+            }
+          },
+          "moduleName": "elixirhunt/templates/components/admin/header-component.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1, "class", "gr-6");
+          var el2 = dom.createTextNode("\n        ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("div");
+          dom.setAttribute(el2, "class", "+text-right");
+          var el3 = dom.createTextNode("\n          ");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createComment("");
+          dom.appendChild(el2, el3);
+          var el3 = dom.createTextNode("\n        ");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1, 1]), 1, 1);
+          return morphs;
+        },
+        statements: [["block", "link-to", [["get", "buttonLink", ["loc", [null, [10, 21], [10, 31]]], 0, 0, 0, 0]], ["class", "button --large"], 0, null, ["loc", [null, [10, 10], [10, 82]]]]],
+        locals: [],
+        templates: [child0]
+      };
+    })();
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 15,
+            "column": 6
+          }
+        },
+        "moduleName": "elixirhunt/templates/components/admin/header-component.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "header-admin__container");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "container");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "gr-6");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("h2");
+        dom.setAttribute(el4, "class", "header-admin__title");
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("h3");
+        dom.setAttribute(el4, "class", "header-admin__description");
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0, 1]);
+        var element1 = dom.childAt(element0, [1]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(dom.childAt(element1, [1]), 0, 0);
+        morphs[1] = dom.createMorphAt(dom.childAt(element1, [3]), 0, 0);
+        morphs[2] = dom.createMorphAt(element0, 3, 3);
+        return morphs;
+      },
+      statements: [["content", "title", ["loc", [null, [4, 38], [4, 49]]], 0, 0, 0, 0], ["content", "description", ["loc", [null, [5, 44], [5, 61]]], 0, 0, 0, 0], ["block", "if", [["get", "hasButton", ["loc", [null, [7, 10], [7, 19]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [7, 4], [13, 11]]]]],
+      locals: [],
+      templates: [child0]
+    };
+  })());
+});
+define("elixirhunt/templates/components/admin/sidebar-component", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
       return {
@@ -1394,7 +1873,7 @@ define("elixirhunt/templates/components/sidebar-component", ["exports"], functio
               "column": 98
             }
           },
-          "moduleName": "elixirhunt/templates/components/sidebar-component.hbs"
+          "moduleName": "elixirhunt/templates/components/admin/sidebar-component.hbs"
         },
         isEmpty: false,
         arity: 0,
@@ -1432,7 +1911,7 @@ define("elixirhunt/templates/components/sidebar-component", ["exports"], functio
               "column": 91
             }
           },
-          "moduleName": "elixirhunt/templates/components/sidebar-component.hbs"
+          "moduleName": "elixirhunt/templates/components/admin/sidebar-component.hbs"
         },
         isEmpty: false,
         arity: 0,
@@ -1469,7 +1948,7 @@ define("elixirhunt/templates/components/sidebar-component", ["exports"], functio
             "column": 0
           }
         },
-        "moduleName": "elixirhunt/templates/components/sidebar-component.hbs"
+        "moduleName": "elixirhunt/templates/components/admin/sidebar-component.hbs"
       },
       isEmpty: false,
       arity: 0,
@@ -2490,7 +2969,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+8a91e5f8"});
+  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+ed24284d"});
 }
 
 /* jshint ignore:end */

@@ -1,11 +1,58 @@
-{{sidebar-component}}
+{{admin.sidebar-component}}
 
 <div id="content-wrapper">
-  <div class="container-fluid">
-    {{#each model as |post|}}
-      {{post.title}}<br/>
+  
+  {{admin.header-component 
+    title="Jobs" 
+    description="Manage the job offers"
+    buttonLink="admin.jobs.new"
+    buttonText="New Job"}}
 
-      <hr>
-    {{/each}}
+  <div class="container-fluid">
+    <div class="listing__container">
+      <div class="listing__result --header">
+        <div class="listing__content">
+          <div class="gr-3">
+            <h3 class="listing__header">Title</h3>
+          </div>
+          <div class="gr-3">
+            <p class="listing__header">Company</p>
+          </div>
+          <div class="gr-3">
+            <p class="listing__header">Location</p>
+          </div>
+          <div class="gr-3">
+            <p class="listing__header">Created At</p>
+          </div>
+          <div class="clear"></div>
+        </div>
+
+        {{#each model as |post| }}
+          <div class="listing__result">
+            <div class="listing__content">
+              <div class="gr-3">
+                <h3 class="listing__detail">{{post.title}}</h3>
+              </div>
+              <div class="gr-3">
+                <p class="listing__detail">{{post.company}}</p>
+              </div>
+              <div class="gr-3">
+                <p class="listing__detail">{{post.location}}</p>
+              </div>
+              <div class="gr-3">
+                <p class="listing__detail">{{moment-from-now post.createdAt}}</p>
+              </div>
+              <div class="clear"></div>
+            </div>
+            {{#if post.displayMore}}
+              <div class="listing__more">
+              </div>
+            {{/if}}
+          </div>
+        {{/each}}
+
+      </div>
+
+    </div>
   </div>
 </div>

@@ -1,0 +1,15 @@
+<div class="header-admin__container">
+  <div class="container">
+    <div class="gr-6">
+      <h2 class="header-admin__title">{{ title }}</h2>
+      <h3 class="header-admin__description">{{ description }}</h3>
+    </div>
+    {{#if hasButton}}
+      <div class="gr-6">
+        <div class="+text-right">
+          {{#link-to buttonLink class="button --large"}}{{buttonText}}{{/link-to}}
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</div>
