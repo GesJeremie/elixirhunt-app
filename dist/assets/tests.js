@@ -31,7 +31,7 @@ define('elixirhunt/tests/components/admin/jobs/form-component.jshint', ['exports
   QUnit.module('JSHint | components/admin/jobs/form-component.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'components/admin/jobs/form-component.js should pass jshint.\ncomponents/admin/jobs/form-component.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 7, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n3 errors');
+    assert.ok(false, 'components/admin/jobs/form-component.js should pass jshint.\ncomponents/admin/jobs/form-component.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 3, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 5, col 1, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncomponents/admin/jobs/form-component.js: line 12, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncomponents/admin/jobs/form-component.js: line 16, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n6 errors');
   });
 });
 define('elixirhunt/tests/components/admin/sidebar-component.jshint', ['exports'], function (exports) {

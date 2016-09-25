@@ -47,6 +47,10 @@
         {{input type="text" value=post.url}}
         <span class="form__help --error">{{v-get this 'post.url' 'message'}}</span>
       </div>
+
+      <div class="+spacer"></div>
+
+      <button type="submit" class="button --large {{if isButtonDisabled "--muted"}}" disabled={{isButtonDisabled}}>Create Job</button>
       
     </form>
   </div>
