@@ -1,2 +1,12 @@
-<h1>New jobs</h1>
-{{outlet}}
+{{admin.sidebar-component}}
+
+<div id="content-wrapper">
+  
+  {{admin.header-component 
+    title="Jobs" 
+    description="Create new job"
+    buttonLink="admin.jobs"
+    buttonText="Back"}}
+
+  {{admin.jobs.form-component post=model}}
+</div>

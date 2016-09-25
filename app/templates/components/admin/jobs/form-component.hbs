@@ -1,0 +1,87 @@
+<div class="container-fluid">
+  <div class="+spacer"></div>
+  <div class="gr-6">
+    <form>
+      <div class="form__container">
+        <label>Title</label>
+        {{input type="text" value=post.title}}
+        <span class="form__help --error">{{v-get this 'post.title' 'message'}}</span>
+      </div>
+      
+      <div class="+spacer"></div>
+
+      <div class="form__container">
+        <label>Company</label>
+        {{input type="text" value=post.company}}
+        <span class="form__help --error">{{v-get this 'post.company' 'message'}}</span>
+      </div>
+
+      <div class="+spacer"></div>
+
+      <div class="form__container">
+        <label>Location</label>
+        {{input type="text" value=post.location}}
+        <span class="form__help --error">{{v-get this 'post.location' 'message'}}</span>
+      </div>
+
+      <div class="+spacer"></div>
+
+      <div class="form__container">
+        <label>Logo</label>
+        {{input type="text" value=post.logo}}
+        <span class="form__help --error">{{v-get this 'post.logo' 'message'}}</span>
+      </div>
+      
+      <div class="+spacer"></div>
+
+      <div class="form__container">
+        <label>Content</label>
+        {{textarea value=post.content}}
+        <span class="form__help --error">{{v-get this 'post.content' 'message'}}</span>
+      </div>
+
+      <div class="+spacer"></div>
+
+      <div class="form__container">
+        <label>Url apply</label>
+        {{input type="text" value=post.url}}
+        <span class="form__help --error">{{v-get this 'post.url' 'message'}}</span>
+      </div>
+      
+    </form>
+  </div>
+
+  <div class="gr-6">
+    <div class="post__container" {{action "toggleShow" post on="click"}}>
+
+      <div class="gr-6">
+        <div class="post__title">{{ post.title }}</div>
+        <div class="post__company">{{if-empty post.company }}</div>
+      </div>
+      <div class="gr-4">
+        <div class="post__location"><i class="icon-location"></i> {{if-empty post.location }}</div>
+      </div>
+      <div class="gr-2">
+        <div class="post__date"><i class="icon-clock"></i> {{moment-from-now post.createdAt }}</div>
+
+      </div>
+      <div class="clear"></div>
+
+      {{#if post.visible}}
+        {{#if post.logo}}
+          <div class="post__logo"><img src="{{ post.logo }}" /></div>
+        {{/if}}
+        <div class="post__content">
+          {{{markdown-decode post.content}}}
+        </div>
+      {{/if}}
+
+    </div>
+    {{#if post.visible}}
+      <div class="post__apply">
+        <a href="{{ post.url }}" target="_blank">Apply for this job</a>
+      </div>
+    {{/if}}
+  </div>
+   
+</div>

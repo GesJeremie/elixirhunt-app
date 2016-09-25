@@ -40,6 +40,17 @@ define('elixirhunt/components/admin/header-component', ['exports', 'ember'], fun
     hasButton: _ember['default'].computed.and('buttonText', 'buttonLink')
   });
 });
+define('elixirhunt/components/admin/jobs/form-component', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Component.extend({
+    auth: _ember['default'].inject.service('auth-admin'),
+
+    actions: {
+      toggleShow: function toggleShow(post) {
+        post.toggleProperty('visible');
+      }
+    }
+  });
+});
 define('elixirhunt/components/admin/sidebar-component', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Component.extend({
     auth: _ember['default'].inject.service('auth-admin'),
@@ -886,7 +897,11 @@ define('elixirhunt/routes/admin/jobs/index', ['exports', 'ember'], function (exp
   });
 });
 define('elixirhunt/routes/admin/jobs/new', ['exports', 'ember', 'elixirhunt/mixins/is-authenticated-admin'], function (exports, _ember, _elixirhuntMixinsIsAuthenticatedAdmin) {
-  exports['default'] = _ember['default'].Route.extend(_elixirhuntMixinsIsAuthenticatedAdmin['default'], {});
+  exports['default'] = _ember['default'].Route.extend(_elixirhuntMixinsIsAuthenticatedAdmin['default'], {
+    model: function model() {
+      return this.store.createRecord('post');
+    }
+  });
 });
 define('elixirhunt/routes/index', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({
@@ -1696,8 +1711,8 @@ define("elixirhunt/templates/admin/jobs/new", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 3,
-            "column": 0
+            "line": 12,
+            "column": 6
           }
         },
         "moduleName": "elixirhunt/templates/admin/jobs/new.hbs"
@@ -1708,24 +1723,35 @@ define("elixirhunt/templates/admin/jobs/new", ["exports"], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("h1");
-        var el2 = dom.createTextNode("New jobs");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
-        dom.appendChild(el0, el1);
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "id", "content-wrapper");
+        var el2 = dom.createTextNode("\n  \n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(1);
-        morphs[0] = dom.createMorphAt(fragment, 2, 2, contextualElement);
+        var element0 = dom.childAt(fragment, [2]);
+        var morphs = new Array(3);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        morphs[1] = dom.createMorphAt(element0, 1, 1);
+        morphs[2] = dom.createMorphAt(element0, 3, 3);
+        dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["content", "outlet", ["loc", [null, [2, 0], [2, 10]]], 0, 0, 0, 0]],
+      statements: [["content", "admin.sidebar-component", ["loc", [null, [1, 0], [1, 27]]], 0, 0, 0, 0], ["inline", "admin.header-component", [], ["title", "Jobs", "description", "Create new job", "buttonLink", "admin.jobs", "buttonText", "Back"], ["loc", [null, [5, 2], [9, 23]]], 0, 0], ["inline", "admin.jobs.form-component", [], ["post", ["subexpr", "@mut", [["get", "model", ["loc", [null, [11, 35], [11, 40]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [11, 2], [11, 42]]], 0, 0]],
       locals: [],
       templates: []
     };
@@ -1946,6 +1972,499 @@ define("elixirhunt/templates/components/admin/header-component", ["exports"], fu
       statements: [["content", "title", ["loc", [null, [4, 38], [4, 49]]], 0, 0, 0, 0], ["content", "description", ["loc", [null, [5, 44], [5, 61]]], 0, 0, 0, 0], ["block", "if", [["get", "hasButton", ["loc", [null, [7, 10], [7, 19]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [7, 4], [13, 11]]]]],
       locals: [],
       templates: [child0]
+    };
+  })());
+});
+define("elixirhunt/templates/components/admin/jobs/form-component", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "revision": "Ember@2.7.3",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 71,
+                "column": 8
+              },
+              "end": {
+                "line": 73,
+                "column": 8
+              }
+            },
+            "moduleName": "elixirhunt/templates/components/admin/jobs/form-component.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("          ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createElement("div");
+            dom.setAttribute(el1, "class", "post__logo");
+            var el2 = dom.createElement("img");
+            dom.appendChild(el1, el2);
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var element1 = dom.childAt(fragment, [1, 0]);
+            var morphs = new Array(1);
+            morphs[0] = dom.createAttrMorph(element1, 'src');
+            return morphs;
+          },
+          statements: [["attribute", "src", ["concat", [["get", "post.logo", ["loc", [null, [72, 47], [72, 56]]], 0, 0, 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0]],
+          locals: [],
+          templates: []
+        };
+      })();
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 70,
+              "column": 6
+            },
+            "end": {
+              "line": 77,
+              "column": 6
+            }
+          },
+          "moduleName": "elixirhunt/templates/components/admin/jobs/form-component.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("        ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1, "class", "post__content");
+          var el2 = dom.createTextNode("\n          ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n        ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          morphs[1] = dom.createUnsafeMorphAt(dom.childAt(fragment, [2]), 1, 1);
+          dom.insertBoundary(fragment, 0);
+          return morphs;
+        },
+        statements: [["block", "if", [["get", "post.logo", ["loc", [null, [71, 14], [71, 23]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [71, 8], [73, 15]]]], ["inline", "markdown-decode", [["get", "post.content", ["loc", [null, [75, 29], [75, 41]]], 0, 0, 0, 0]], [], ["loc", [null, [75, 10], [75, 44]]], 0, 0]],
+        locals: [],
+        templates: [child0]
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "revision": "Ember@2.7.3",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 80,
+              "column": 4
+            },
+            "end": {
+              "line": 84,
+              "column": 4
+            }
+          },
+          "moduleName": "elixirhunt/templates/components/admin/jobs/form-component.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("div");
+          dom.setAttribute(el1, "class", "post__apply");
+          var el2 = dom.createTextNode("\n        ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createElement("a");
+          dom.setAttribute(el2, "target", "_blank");
+          var el3 = dom.createTextNode("Apply for this job");
+          dom.appendChild(el2, el3);
+          dom.appendChild(el1, el2);
+          var el2 = dom.createTextNode("\n      ");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element0 = dom.childAt(fragment, [1, 1]);
+          var morphs = new Array(1);
+          morphs[0] = dom.createAttrMorph(element0, 'href');
+          return morphs;
+        },
+        statements: [["attribute", "href", ["concat", [["get", "post.url", ["loc", [null, [82, 20], [82, 28]]], 0, 0, 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0]],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "revision": "Ember@2.7.3",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 87,
+            "column": 6
+          }
+        },
+        "moduleName": "elixirhunt/templates/components/admin/jobs/form-component.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "container-fluid");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "+spacer");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "gr-6");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("form");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "form__container");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Title");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "form__help --error");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      \n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "+spacer");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "form__container");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Company");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "form__help --error");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "+spacer");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "form__container");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Location");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "form__help --error");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "+spacer");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "form__container");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Logo");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "form__help --error");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      \n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "+spacer");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "form__container");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Content");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "form__help --error");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "+spacer");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "form__container");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Url apply");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("span");
+        dom.setAttribute(el5, "class", "form__help --error");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      \n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "gr-6");
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "post__container");
+        var el4 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "gr-6");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "post__title");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "post__company");
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "gr-4");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "post__location");
+        var el6 = dom.createElement("i");
+        dom.setAttribute(el6, "class", "icon-location");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode(" ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "gr-2");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "post__date");
+        var el6 = dom.createElement("i");
+        dom.setAttribute(el6, "class", "icon-clock");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode(" ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createComment("");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "clear");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n   \n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element2 = dom.childAt(fragment, [0]);
+        var element3 = dom.childAt(element2, [3, 1]);
+        var element4 = dom.childAt(element3, [1]);
+        var element5 = dom.childAt(element3, [5]);
+        var element6 = dom.childAt(element3, [9]);
+        var element7 = dom.childAt(element3, [13]);
+        var element8 = dom.childAt(element3, [17]);
+        var element9 = dom.childAt(element3, [21]);
+        var element10 = dom.childAt(element2, [5]);
+        var element11 = dom.childAt(element10, [1]);
+        var element12 = dom.childAt(element11, [1]);
+        var morphs = new Array(19);
+        morphs[0] = dom.createMorphAt(element4, 3, 3);
+        morphs[1] = dom.createMorphAt(dom.childAt(element4, [5]), 0, 0);
+        morphs[2] = dom.createMorphAt(element5, 3, 3);
+        morphs[3] = dom.createMorphAt(dom.childAt(element5, [5]), 0, 0);
+        morphs[4] = dom.createMorphAt(element6, 3, 3);
+        morphs[5] = dom.createMorphAt(dom.childAt(element6, [5]), 0, 0);
+        morphs[6] = dom.createMorphAt(element7, 3, 3);
+        morphs[7] = dom.createMorphAt(dom.childAt(element7, [5]), 0, 0);
+        morphs[8] = dom.createMorphAt(element8, 3, 3);
+        morphs[9] = dom.createMorphAt(dom.childAt(element8, [5]), 0, 0);
+        morphs[10] = dom.createMorphAt(element9, 3, 3);
+        morphs[11] = dom.createMorphAt(dom.childAt(element9, [5]), 0, 0);
+        morphs[12] = dom.createElementMorph(element11);
+        morphs[13] = dom.createMorphAt(dom.childAt(element12, [1]), 0, 0);
+        morphs[14] = dom.createMorphAt(dom.childAt(element12, [3]), 0, 0);
+        morphs[15] = dom.createMorphAt(dom.childAt(element11, [3, 1]), 2, 2);
+        morphs[16] = dom.createMorphAt(dom.childAt(element11, [5, 1]), 2, 2);
+        morphs[17] = dom.createMorphAt(element11, 9, 9);
+        morphs[18] = dom.createMorphAt(element10, 3, 3);
+        return morphs;
+      },
+      statements: [["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.title", ["loc", [null, [7, 34], [7, 44]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [7, 8], [7, 46]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.title"], [], [], 0, 0], "message"], [], ["loc", [null, [8, 41], [8, 78]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.company", ["loc", [null, [15, 34], [15, 46]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [15, 8], [15, 48]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.company"], [], [], 0, 0], "message"], [], ["loc", [null, [16, 41], [16, 80]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.location", ["loc", [null, [23, 34], [23, 47]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [23, 8], [23, 49]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.location"], [], [], 0, 0], "message"], [], ["loc", [null, [24, 41], [24, 81]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.logo", ["loc", [null, [31, 34], [31, 43]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [31, 8], [31, 45]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.logo"], [], [], 0, 0], "message"], [], ["loc", [null, [32, 41], [32, 77]]], 0, 0], ["inline", "textarea", [], ["value", ["subexpr", "@mut", [["get", "post.content", ["loc", [null, [39, 25], [39, 37]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [39, 8], [39, 39]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.content"], [], [], 0, 0], "message"], [], ["loc", [null, [40, 41], [40, 80]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "post.url", ["loc", [null, [47, 34], [47, 42]]], 0, 0, 0, 0]], [], [], 0, 0]], ["loc", [null, [47, 8], [47, 44]]], 0, 0], ["inline", "get", [["subexpr", "get", [["get", "this.validations.attrs", [], 0, 0, 0, 0], "post.url"], [], [], 0, 0], "message"], [], ["loc", [null, [48, 41], [48, 76]]], 0, 0], ["element", "action", ["toggleShow", ["get", "post", ["loc", [null, [55, 55], [55, 59]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [55, 33], [55, 72]]], 0, 0], ["content", "post.title", ["loc", [null, [58, 33], [58, 49]]], 0, 0, 0, 0], ["inline", "if-empty", [["get", "post.company", ["loc", [null, [59, 46], [59, 58]]], 0, 0, 0, 0]], [], ["loc", [null, [59, 35], [59, 61]]], 0, 0], ["inline", "if-empty", [["get", "post.location", ["loc", [null, [62, 77], [62, 90]]], 0, 0, 0, 0]], [], ["loc", [null, [62, 66], [62, 93]]], 0, 0], ["inline", "moment-from-now", [["get", "post.createdAt", ["loc", [null, [65, 77], [65, 91]]], 0, 0, 0, 0]], [], ["loc", [null, [65, 59], [65, 94]]], 0, 0], ["block", "if", [["get", "post.visible", ["loc", [null, [70, 12], [70, 24]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [70, 6], [77, 13]]]], ["block", "if", [["get", "post.visible", ["loc", [null, [80, 10], [80, 22]]], 0, 0, 0, 0]], [], 1, null, ["loc", [null, [80, 4], [84, 11]]]]],
+      locals: [],
+      templates: [child0, child1]
     };
   })());
 });
@@ -2287,7 +2806,7 @@ define("elixirhunt/templates/index", ["exports"], function (exports) {
             morphs[1] = dom.createElementMorph(element0);
             return morphs;
           },
-          statements: [["attribute", "href", ["concat", [["get", "post.apply", ["loc", [null, [78, 56], [78, 66]]], 0, 0, 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["element", "action", ["apply", ["get", "post", ["loc", [null, [78, 28], [78, 32]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [78, 11], [78, 46]]], 0, 0]],
+          statements: [["attribute", "href", ["concat", [["get", "post.url", ["loc", [null, [78, 56], [78, 64]]], 0, 0, 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["element", "action", ["apply", ["get", "post", ["loc", [null, [78, 28], [78, 32]]], 0, 0, 0, 0]], ["on", "click"], ["loc", [null, [78, 11], [78, 46]]], 0, 0]],
           locals: [],
           templates: []
         };
