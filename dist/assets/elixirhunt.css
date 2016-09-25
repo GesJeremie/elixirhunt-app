@@ -115,7 +115,7 @@
     zoom: 1; } }
 
 @media screen and (max-width: 768px) {
-  .gr-0\@xs, .gr-1\@xs, .gr-2\@xs, .gr-3\@xs, .gr-4\@xs, .gr-5\@xs, .gr-6\@xs, .gr-7\@xs, .gr-8\@xs, .gr-9\@xs, .gr-10\@xs, .gr-11\@xs, .gr-12\@xs {
+  .gr-0\@xs, .gr-1\@xs, .gr-2\@xs, .gr-3\@xs, .gr-4\@xs, .gr-5\@xs, .gr-6\@xs, .gr-7\@xs, .gr-8\@xs, .gr-9\@xs, .gr-10\@xs, .gr-11\@xs, .gr-12\@xs, [class*="gr-"] {
     display: inline-block;
     min-height: 1px;
     float: left;
@@ -2196,10 +2196,18 @@ body {
 .container {
   margin: 0 auto;
   max-width: 960px; }
+  @media screen and (max-width: 768px) {
+    .container {
+      margin-left: 1em;
+      margin-right: 1em; } }
 
 .container-fluid {
   margin: 0 auto;
   width: 95%; }
+
+@media screen and (max-width: 768px) {
+  [class*="gr-"] {
+    width: 100%; } }
 
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -2537,6 +2545,23 @@ input:-webkit-autofill {
   text-align: center; }
   .footer__sword img {
     width: 60px; }
+
+.footer__avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  background-size: cover;
+  margin-top: .7em;
+  margin-right: auto;
+  margin-left: auto;
+  background-image: url("/assets/images/avatar.png"); }
+
+.footer__description {
+  text-align: center;
+  margin-top: 0.4em;
+  margin-bottom: 2.5em; }
+  .footer__description a {
+    color: #FFB836; }
 
 .stats__container {
   margin-top: 3em; }

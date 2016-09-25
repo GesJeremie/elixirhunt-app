@@ -3263,7 +3263,7 @@ define("elixirhunt/templates/index", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 88,
+            "line": 93,
             "column": 0
           }
         },
@@ -3498,9 +3498,28 @@ define("elixirhunt/templates/index", ["exports"], function (exports) {
         var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
-        dom.setAttribute(el1, "class", "footer__sword");
-        var el2 = dom.createElement("img");
-        dom.setAttribute(el2, "src", "/assets/images/elixir.png");
+        dom.setAttribute(el1, "class", "footer__by");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "footer__avatar");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "class", "footer__description");
+        var el3 = dom.createTextNode("\n    Another thing from ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("a");
+        dom.setAttribute(el3, "href", "http://www.gesjeremie.io/");
+        dom.setAttribute(el3, "target", "_blank");
+        var el4 = dom.createTextNode("gesjeremie.io");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
@@ -3687,7 +3706,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+01ebb278"});
+  require("elixirhunt/app")["default"].create({"name":"elixirhunt","version":"0.0.0+89e42c2a"});
 }
 
 /* jshint ignore:end */

@@ -44,7 +44,11 @@
 .container
   margin: 0 auto
   max-width: 960px
-
+  
+  +gridle_state(xs)
+    margin-left: 1em
+    margin-right: 1em
+  
 // Fluid container (useful for navbars and stuff like that)
 .container-fluid
   margin: 0 auto
@@ -52,8 +56,8 @@
 
 // Mobile
 [class*="gr-"]
-  +gridle_set((mobile : (grid : 12, push : 0, pull : 0, prefix : 0, suffix : 0)))
-
+  +gridle_state(xs)
+    +gridle_grid(12)
 
 // ===========================================================
 // Reset
