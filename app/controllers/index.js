@@ -4,10 +4,6 @@ export default Ember.Controller.extend({
 
   subscribeText: 'Subscribe',
   
-  classified: Ember.computed('model', function() {
-    return this.get('model').toArray().reverse()
-  }),
-
   isFormValid: Ember.computed('email', 'firstname', 'lastname', function() {
 
     if (!this.get('email') || !this.get('firstname') || !this.get('lastname')) {

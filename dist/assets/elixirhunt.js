@@ -159,41 +159,19 @@ define('elixirhunt/controllers/admin/auth/login', ['exports', 'elixirhunt/mixins
 
   });
 });
-define('elixirhunt/controllers/admin/jobs/index', ['exports', 'elixirhunt/mixins/disabled-button', 'ember-cp-validations'], function (exports, _elixirhuntMixinsDisabledButton, _emberCpValidations) {
-
-  var Validations = (0, _emberCpValidations.buildValidations)({
-    password: (0, _emberCpValidations.validator)('presence', true)
+define('elixirhunt/controllers/admin/index', ['exports'], function (exports) {
+  exports['default'] = Ember.Controller.extend({
+    redirect: function redirect() {
+      this.transitionTo('admin.jobs');
+    }
   });
-
-  exports['default'] = Ember.Controller.extend(Validations, _elixirhuntMixinsDisabledButton['default'], {
-
-    auth: Ember.inject.service('auth-admin'),
-    notification: Ember.inject.service(),
+});
+define('elixirhunt/controllers/admin/jobs/index', ['exports'], function (exports) {
+  exports['default'] = Ember.Controller.extend({
 
     actions: {
       showMore: function showMore(post) {
         post.toggleProperty('showMore');
-      },
-
-      remove: function remove(post) {
-        var _this = this;
-
-        swal({
-          title: 'Are you sure?',
-          text: 'You will not be able to recover this job',
-          type: 'warning',
-          showCancelButton: true,
-          closeOnConfirm: false,
-          showLoaderOnConfirm: true
-        }, function () {
-          post.destroyRecord().then(function () {
-            swal.close();
-            _this.get('notification').success('Job deleted');
-          })['catch'](function () {
-            swal.enableButtons();
-            _this.get('notification').error('Impossible to delete the job');
-          });
-        });
       }
     }
 
@@ -205,10 +183,6 @@ define('elixirhunt/controllers/index', ['exports'], function (exports) {
     keen: Ember.inject.service(),
 
     subscribeText: 'Subscribe',
-
-    classified: Ember.computed('model', function () {
-      return this.get('model').toArray().reverse();
-    }),
 
     isFormValid: Ember.computed('email', 'firstname', 'lastname', function () {
 
@@ -906,11 +880,18 @@ define('elixirhunt/routes/404', ['exports', 'ember'], function (exports, _ember)
 
   });
 });
+define('elixirhunt/routes/admin/index', ['exports'], function (exports) {
+  exports['default'] = Ember.Route.extend({
+    redirect: function redirect() {
+      this.transitionTo('admin.jobs');
+    }
+  });
+});
 define('elixirhunt/routes/admin/jobs/edit', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
 });
-define('elixirhunt/routes/admin/jobs/index', ['exports', 'ember'], function (exports, _ember) {
-  exports['default'] = _ember['default'].Route.extend({
+define('elixirhunt/routes/admin/jobs/index', ['exports', 'ember', 'elixirhunt/mixins/is-authenticated-admin'], function (exports, _ember, _elixirhuntMixinsIsAuthenticatedAdmin) {
+  exports['default'] = _ember['default'].Route.extend(_elixirhuntMixinsIsAuthenticatedAdmin['default'], {
     model: function model() {
       return this.store.findAll('post');
     }
@@ -3237,7 +3218,7 @@ define("elixirhunt/templates/index", ["exports"], function (exports) {
         morphs[7] = dom.createMorphAt(dom.childAt(fragment, [4]), 1, 1);
         return morphs;
       },
-      statements: [["element", "action", ["subscribe"], ["on", "submit"], ["loc", [null, [10, 12], [10, 46]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [15, 36], [15, 41]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "Email"], ["loc", [null, [15, 10], [15, 63]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "firstname", ["loc", [null, [18, 36], [18, 45]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "First Name"], ["loc", [null, [18, 10], [18, 72]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "lastname", ["loc", [null, [21, 36], [21, 44]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "Last Name"], ["loc", [null, [21, 10], [21, 70]]], 0, 0], ["attribute", "class", ["concat", [["subexpr", "unless", [["get", "isFormValid", ["loc", [null, [24, 48], [24, 59]]], 0, 0, 0, 0], "--disabled"], [], ["loc", [null, [24, 39], [24, 74]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["attribute", "disabled", ["get", "disabledButton", ["loc", [null, [24, 88], [24, 102]]], 0, 0, 0, 0], 0, 0, 0, 0], ["content", "subscribeText", ["loc", [null, [24, 105], [24, 124]]], 0, 0, 0, 0], ["block", "each", [["get", "classified", ["loc", [null, [50, 10], [50, 20]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [50, 2], [81, 11]]]]],
+      statements: [["element", "action", ["subscribe"], ["on", "submit"], ["loc", [null, [10, 12], [10, 46]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [15, 36], [15, 41]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "Email"], ["loc", [null, [15, 10], [15, 63]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "firstname", ["loc", [null, [18, 36], [18, 45]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "First Name"], ["loc", [null, [18, 10], [18, 72]]], 0, 0], ["inline", "input", [], ["type", "text", "value", ["subexpr", "@mut", [["get", "lastname", ["loc", [null, [21, 36], [21, 44]]], 0, 0, 0, 0]], [], [], 0, 0], "placeholder", "Last Name"], ["loc", [null, [21, 10], [21, 70]]], 0, 0], ["attribute", "class", ["concat", [["subexpr", "unless", [["get", "isFormValid", ["loc", [null, [24, 48], [24, 59]]], 0, 0, 0, 0], "--disabled"], [], ["loc", [null, [24, 39], [24, 74]]], 0, 0]], 0, 0, 0, 0, 0], 0, 0, 0, 0], ["attribute", "disabled", ["get", "disabledButton", ["loc", [null, [24, 88], [24, 102]]], 0, 0, 0, 0], 0, 0, 0, 0], ["content", "subscribeText", ["loc", [null, [24, 105], [24, 124]]], 0, 0, 0, 0], ["block", "each", [["get", "model", ["loc", [null, [50, 10], [50, 15]]], 0, 0, 0, 0]], [], 0, null, ["loc", [null, [50, 2], [81, 11]]]]],
       locals: [],
       templates: [child0]
     };

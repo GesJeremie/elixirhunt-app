@@ -52,13 +52,22 @@ define('elixirhunt/tests/controllers/admin/auth/login.jshint', ['exports'], func
     assert.ok(false, 'controllers/admin/auth/login.js should pass jshint.\ncontrollers/admin/auth/login.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/auth/login.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/auth/login.js: line 4, col 1, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/admin/auth/login.js: line 8, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/auth/login.js: line 14, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/admin/auth/login.js: line 23, col 7, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/admin/auth/login.js: line 26, col 14, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/auth/login.js: line 31, col 14, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\n\n8 errors');
   });
 });
+define('elixirhunt/tests/controllers/admin/index.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/admin/index.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'controllers/admin/index.js should pass jshint.\ncontrollers/admin/index.js: line 1, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/index.js: line 2, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n2 errors');
+  });
+});
 define('elixirhunt/tests/controllers/admin/jobs/index.jshint', ['exports'], function (exports) {
   'use strict';
 
   QUnit.module('JSHint | controllers/admin/jobs/index.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/admin/jobs/index.js should pass jshint.\ncontrollers/admin/jobs/index.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/jobs/index.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/jobs/index.js: line 4, col 1, \'const\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/admin/jobs/index.js: line 8, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/jobs/index.js: line 14, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/admin/jobs/index.js: line 18, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/admin/jobs/index.js: line 26, col 11, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/jobs/index.js: line 28, col 18, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/jobs/index.js: line 32, col 19, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\n\n9 errors');
+    assert.ok(false, 'controllers/admin/jobs/index.js should pass jshint.\ncontrollers/admin/jobs/index.js: line 1, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/admin/jobs/index.js: line 4, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n2 errors');
   });
 });
 define('elixirhunt/tests/controllers/index.jshint', ['exports'], function (exports) {
@@ -67,7 +76,7 @@ define('elixirhunt/tests/controllers/index.jshint', ['exports'], function (expor
   QUnit.module('JSHint | controllers/index.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/index.js should pass jshint.\ncontrollers/index.js: line 1, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/index.js: line 8, col 49, Missing semicolon.\ncontrollers/index.js: line 32, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 36, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 51, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 55, col 5, \'let\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 62, col 27, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/index.js: line 70, col 30, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/index.js: line 71, col 47, Missing semicolon.\ncontrollers/index.js: line 80, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 84, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 88, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n12 errors');
+    assert.ok(false, 'controllers/index.js should pass jshint.\ncontrollers/index.js: line 1, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/index.js: line 28, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 32, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 47, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 51, col 5, \'let\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 58, col 27, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/index.js: line 66, col 30, \'arrow function syntax (=>)\' is only available in ES6 (use \'esversion: 6\').\ncontrollers/index.js: line 67, col 47, Missing semicolon.\ncontrollers/index.js: line 76, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 80, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\ncontrollers/index.js: line 84, col 5, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n11 errors');
   });
 });
 define('elixirhunt/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {
@@ -398,6 +407,15 @@ define('elixirhunt/tests/routes/404.jshint', ['exports'], function (exports) {
     assert.ok(false, 'routes/404.js should pass jshint.\nroutes/404.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/404.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/404.js: line 5, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n3 errors');
   });
 });
+define('elixirhunt/tests/routes/admin/index.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/admin/index.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'routes/admin/index.js should pass jshint.\nroutes/admin/index.js: line 1, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/index.js: line 2, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n2 errors');
+  });
+});
 define('elixirhunt/tests/routes/admin/jobs/edit.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -413,7 +431,7 @@ define('elixirhunt/tests/routes/admin/jobs/index.jshint', ['exports'], function 
   QUnit.module('JSHint | routes/admin/jobs/index.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'routes/admin/jobs/index.js should pass jshint.\nroutes/admin/jobs/index.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/index.js: line 3, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/index.js: line 4, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n3 errors');
+    assert.ok(false, 'routes/admin/jobs/index.js should pass jshint.\nroutes/admin/jobs/index.js: line 1, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/index.js: line 2, col 1, \'import\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/index.js: line 4, col 1, \'export\' is only available in ES6 (use \'esversion: 6\').\nroutes/admin/jobs/index.js: line 5, col 3, \'concise methods\' is available in ES6 (use \'esversion: 6\') or Mozilla JS extensions (use moz).\n\n4 errors');
   });
 });
 define('elixirhunt/tests/routes/admin/jobs/new.jshint', ['exports'], function (exports) {
