@@ -1,6 +1,6 @@
 # :hamster: Elixirhunt
 
-![Screen](https://dl.dropboxusercontent.com/u/58469525/stackoverflow/github/elixirhunt_desktop.png)
+[![Website](https://dl.dropboxusercontent.com/u/58469525/stackoverflow/github/elixirhunt_desktop.png)](http://www.elixirhunt.com/)
 
 ## About
 We hunt for Elixir Jobs ... so you don't have to!
