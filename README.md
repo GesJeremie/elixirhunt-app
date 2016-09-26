@@ -1,8 +1,8 @@
+# :hamster: Elixirhunt
+
 ![Logo Elixirhunt](https://pbs.twimg.com/profile_images/772145172637478912/T0CpBu2j.jpg)
 ![Logo Ember](http://emberjs.com/images/about/ember-productivity-sm.png)
 
-
-# :hamster: Elixirhunt
 
 ## About
 We hunt for Elixir Jobs ... so you don't have to!
