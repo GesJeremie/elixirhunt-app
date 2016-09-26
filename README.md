@@ -1,53 +1,14 @@
-# Elixirhunt
+![Logo Elixirhunt](https://pbs.twimg.com/profile_images/772145172637478912/T0CpBu2j.jpg)
+![Logo Ember](http://emberjs.com/images/about/ember-productivity-sm.png)
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
 
-## Prerequisites
+# :hamster: Elixirhunt
 
-You will need the following things properly installed on your computer.
+## About
+We hunt for Elixir Jobs ... so you don't have to!
 
-* [Git](http://git-scm.com/)
-* [Node.js](http://nodejs.org/) (with NPM)
-* [Bower](http://bower.io/)
-* [Ember CLI](http://ember-cli.com/)
-* [PhantomJS](http://phantomjs.org/)
+## Description
+It's the repo for the front-end application (built with EmberJS)
 
-## Installation
-
-* `git clone <repository-url>` this repository
-* change into the new directory
-* `npm install`
-* `bower install`
-
-## Running / Development
-
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-
-### Code Generators
-
-Make use of the many generators for code, try `ember help generate` for more details
-
-### Running Tests
-
-* `ember test`
-* `ember test --server`
-
-### Building
-
-* `ember build` (development)
-* `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](http://emberjs.com/)
-* [ember-cli](http://ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
-
+## Community
+Join us on twitter: https://twitter.com/elixirhunt
