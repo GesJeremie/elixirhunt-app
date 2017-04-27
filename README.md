@@ -13,4 +13,4 @@ Join us on twitter: https://twitter.com/elixirhunt
 
 ## Powered By
 
-![Logo Ember](http://emberjs.com/images/about/ember-productivity-sm.png)
+![Logo Ember](https://s29.postimg.org/46obye1d3/ember-logo.png)
