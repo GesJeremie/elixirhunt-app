@@ -1,4 +1,4 @@
-> :skull: This project have been archived.
+> :skull: This project has been archived.
 
 # :hamster: Elixirhunt
 
